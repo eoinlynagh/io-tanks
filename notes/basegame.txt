@@ -13,4 +13,4 @@ tanks:
                 - i.e
             - generate one every day/week/month
             - one static maze
-                - higher skill celing?
+                - higher skill ceiling?
