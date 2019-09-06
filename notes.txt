@@ -16,7 +16,6 @@
     - powerups
         - nothing that prevents death
 
-
 controls:
     - left click shoot
         - bullets go straigt
@@ -28,7 +27,14 @@ controls:
         - could have i frames
     - WASD/ARROW keys
 
+aesthetics:
+    - childish
+    - simple looks good without much effort
+    - appeals to youngins
+    - minimal grpahics
+
 game-mode:
+    - town of salem style chat filter
     - short games, quick in and 
     - easy to control (anyone familar with wasd)
         - Tank controls?
