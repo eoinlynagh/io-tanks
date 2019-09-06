@@ -28,7 +28,7 @@ controls:
         - could have i frames
     - WASD/ARROW keys
 
-gamemode:
+game-mode:
     - short games, quick in and 
     - easy to control (anyone familar with wasd)
         - Tank controls?
@@ -63,4 +63,4 @@ gamemode:
                 - better for larger player base (more chaos)
                 - LEADERBOARD
                     - only one winner
-                - 
+            - 
