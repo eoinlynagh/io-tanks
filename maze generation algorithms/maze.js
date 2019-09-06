@@ -44,16 +44,16 @@ function makeMaze(height, width, complexity, density) {
     return Z;
 }
 
-function mazePoints(maze){
+function mazePoints(maze) {
     points = []
-    for(i = 0; i < maze.length; i++){
-        for(j = 0; j < maze[i].length; j++){
-            if(maze[i][j] == 1){
-                points.push([i,j]);
+    for (i = 0; i < maze.length; i++) {
+        for (j = 0; j < maze[i].length; j++) {
+            if (maze[i][j] == 1) {
+                points.push([i, j]);
             }
         }
     }
-    return points; 
+    return points;
 }
 
 function debugMsg(msg) {

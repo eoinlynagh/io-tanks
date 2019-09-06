@@ -10,9 +10,9 @@
 <body>
     <div id="inputs">
         <label for="width">Width:</label>
-        <input type="text" id="width" value="81">
+        <input type="text" id="width" value="200">
         <label for="height">Height:</label>
-        <input type="text" id="height" value="51">
+        <input type="text" id="height" value="100">
         <label for="complexity">Complexity:</label>
         <input type="text" id="complexity" value="0.75">
         <label for="density">Density:</label>
@@ -24,13 +24,13 @@
 <script>
 
     function updateChart(width, height,complexity,density) {
-        if(density >= 2 || complexity >= 5) {
+        if(density > 2 || complexity > 5) {
             alert("please set density to less than 2, and complexity to less than 5");
             return false;
         }
 
-        if(width > 200 || height > 200){
-            alert("Please set width and height to less than 200 and less than 200");
+        if(width * height > 100 * 200){
+            alert("Please set product of width and height to less than 20000");
         }
 
         maze = makeMaze(width, height, complexity, density);
