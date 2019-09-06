@@ -20,10 +20,16 @@
         <label for="density">Density:</label>
         <input type="text" id="density" value="0.3">
         <label for="choice">Shape:</label>
-        <select id="choice">
+        <select id="choiceShape">
             <option value="square">Square</option>
             <option value="circle">Circle</option>
         </select>
+        <label for="choice">Remove Stragglers:</label>
+        <select id="choiceStragglers">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+    
 
     </div>
     <div>
@@ -41,7 +47,9 @@
         height = $('#height').val();
         complexity = $('#complexity').val();
         density = $('#density').val();
-        updateChart(width, height, complexity, density);
+        markerShape = String($('#choiceShape').val());
+        removeStragglers = ($('#choiceStragglers').val()) == "true";
+        updateChart(width, height, complexity, density, markerShape, removeStragglers);
     });
 
     $('#generate').click(function () {
@@ -49,7 +57,9 @@
         height = $('#height').val();
         complexity = $('#complexity').val();
         density = $('#density').val();
-        updateChart(width, height, complexity, density);
+        markerShape = String($('#choiceShape').val());
+        removeStragglers = ($('#choiceStragglers').val()) == "true";
+        updateChart(width, height, complexity, density, markerShape, removeStragglers);
     });
 
     $('#download').click(function () {

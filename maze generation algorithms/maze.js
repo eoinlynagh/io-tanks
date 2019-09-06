@@ -1,4 +1,4 @@
-function makeMaze(height, width, complexity, density) {
+function makeMaze(height, width, complexity, density, removeStragglers) {
 
     shape = getShape(height, width);
     complexity = getComplexity(shape, complexity);
@@ -36,15 +36,17 @@ function makeMaze(height, width, complexity, density) {
         }
     }
 
-    //need to have something here to prevent inaccessible tiles from being created
     //or we could prevent tanks from spawning in inaccessible area, like 3/4 directions must be clear for it to spawn there, which would prevent like almost every case 
-    // for (i = 2; i < Z.length - 2; i++) {
-    //     for (j = 2; j < Z[0].length - 2; j++) {
-    //         if (Z[i + 2][j] == 1 && Z[i - 2][j] && Z[i][j + 2] == 1 && Z[i][j-2] == 1){
-    //             Z[i][j] = 1;
-    //         }
-    //     }
-    // }
+    //prevents stragglers from spawning
+    if (removeStragglers) {
+        for (i = 2; i < Z.length - 2; i++) {
+            for (j = 2; j < Z[0].length - 2; j++) {
+                if (Z[i + 2][j] == 0 && Z[i - 2][j] == 0 && Z[i][j + 2] == 0 && Z[i][j - 2] == 0) {
+                    Z[i][j] = 0;
+                }
+            }
+        }
+    }
     return Z;
 }
 

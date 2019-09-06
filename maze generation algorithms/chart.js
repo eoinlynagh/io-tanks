@@ -1,7 +1,5 @@
 //generates a maze chart based on some variables, need a reference to maze.js to use this
-function updateChart(width, height, complexity, density) {
-
-    markerShape = String($('#choice').val());
+function updateChart(width, height, complexity, density, markerShape, removeStragglers) {
 
     if (density > 1 || complexity > 1) {
         alert("please set density and complexity to less than 1");
@@ -13,7 +11,7 @@ function updateChart(width, height, complexity, density) {
         return false;
     }
 
-    maze = makeMaze(width, height, complexity, density);
+    maze = makeMaze(width, height, complexity, density, removeStragglers);
     points = mazePoints(maze);
     scaleHeight = height * 1 + 1;
     var myConfig1 = {
