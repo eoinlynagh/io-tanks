@@ -22,15 +22,15 @@
 </body>
 
 <script>
-    function updateChart() {
-        width = $('#width').val();
-        height = $('#height').val();
-        complexity = $('#complexity').val();
-        density = $('#density').val();
 
-        if(density > 6 || complexity > 50) {
-            alert("please set density to less than 6, and complexity to less than 50");
+    function updateChart(width, height,complexity,density) {
+        if(density >= 2 || complexity >= 5) {
+            alert("please set density to less than 2, and complexity to less than 5");
             return false;
+        }
+
+        if(width > 200 || height > 200){
+            alert("Please set width and height to less than 200 and less than 200");
         }
 
         maze = makeMaze(width, height, complexity, density);
@@ -51,10 +51,24 @@
     }
 
     $('input').focusout(function(){
-        updateChart();
+        width = $('#width').val();
+        height = $('#height').val();
+        complexity = $('#complexity').val();
+        density = $('#density').val();
+        
+        updateChart(width, height, complexity, density);
     });
 
-    updateChart();
+    $(document).ready(function(){
+        width = $('#width').val();
+        height = $('#height').val();
+        complexity = $('#complexity').val();
+        density = $('#density').val();
+        
+        updateChart(width, height, complexity, density);
+    });
+
+    
 </script>
 
 </html>
