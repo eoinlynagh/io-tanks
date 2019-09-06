@@ -3,13 +3,7 @@ function makeMaze(height, width, complexity, density) {
     shape = getShape(height, width);
     complexity = getComplexity(shape, complexity);
     density = getDensity(shape, density);
-
     Z = borderedMaze(shape);
-
-    debugMsg(shape);
-    debugMsg(complexity);
-    debugMsg(density);
-    debugMsg(Z);
 
     for (i = 0; i < density; i++) {
         x = getRandom(floorDivide(shape[1], 2)) * 2;
@@ -43,7 +37,7 @@ function makeMaze(height, width, complexity, density) {
     }
 
     //need to have something here to prevent inaccessible tiles from being created
-    //or we could prevent tanks from spawning in inaccessible area, like all 4 directions must be clear for it to spawn there
+    //or we could prevent tanks from spawning in inaccessible area, like 3/4 directions must be clear for it to spawn there, which would prevent like almost every case 
     // for (i = 2; i < Z.length - 2; i++) {
     //     for (j = 2; j < Z[0].length - 2; j++) {
     //         if (Z[i + 2][j] == 1 && Z[i - 2][j] && Z[i][j + 2] == 1 && Z[i][j-2] == 1){
@@ -64,13 +58,6 @@ function mazePoints(maze) {
         }
     }
     return points;
-}
-
-function debugMsg(msg) {
-    if (false) {
-        console.log(msg);
-    }
-    return true;
 }
 
 //returns a number in range 0 to highest - 1
