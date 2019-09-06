@@ -35,8 +35,6 @@ function makeMaze(height, width, complexity, density, removeStragglers) {
             }
         }
     }
-
-    //or we could prevent tanks from spawning in inaccessible area, like 3/4 directions must be clear for it to spawn there, which would prevent like almost every case 
     //prevents stragglers from spawning
     if (removeStragglers) {
         for (i = 2; i < Z.length - 2; i++) {
@@ -50,8 +48,9 @@ function makeMaze(height, width, complexity, density, removeStragglers) {
     return Z;
 }
 
+//gets the x and y coordinates of all walls on the map
 function mazePoints(maze) {
-    points = []
+    points = [];
     for (i = 0; i < maze.length; i++) {
         for (j = 0; j < maze[i].length; j++) {
             if (maze[i][j] == 1) {
@@ -62,9 +61,45 @@ function mazePoints(maze) {
     return points;
 }
 
+//puts players on the map
+function mazeSpawns(maze, height, width, max = 20) {
+    points = [];
+    count = 0;
+    while (count < max) {
+        i = getRandomL(width - 1, 2);
+        j = getRandomL(height - 1, 2);
+
+        //either 0 or 1 for best results
+        //1: means that it can be adjacent to one wall
+        //0: means that it can be adjacent to zero walls
+        sum = maze[i + 2][j] + maze[i - 2][j] + maze[i][j + 2] + maze[i][j - 2];
+
+        if (maze[i][j] == 0) {
+            if (sum <= 1) {
+                // uncomment these to prevent it from being placed next to diagonals
+                // if (maze[i + 2][j + 2] == 0 && maze[i - 2][j - 2] == 0 && maze[i - 2][j + 2] == 0 && maze[i + 2][j - 2] == 0) {
+                maze[i][j] = 1;
+                points.push([i, j])
+                count++;
+                //}
+            }
+        }
+    }
+    return points;
+}
+
 //returns a number in range 0 to highest - 1
 function getRandom(highest) {
     return Math.floor((Math.random() * highest) + 0);
+}
+
+//returns a number in range lowest to highest - 1
+function getRandomL(highest, lowest) {
+    random = Math.floor((Math.random() * (highest - lowest)) + lowest);
+    if (random % 2 != 0) {
+        random++;
+    }
+    return random;
 }
 
 //turns the sizes into odd numbers and creates a shape array

@@ -1,9 +1,9 @@
 <html>
 
 <head>
-    <script type="text/javascript" src="maze.js"></script>
-    <script type="text/javascript" src="chart.js"></script>
-    <script type="text/javascript" src="csv.js"></script>
+    <script type="text/javascript" src="scripts/maze.js"></script>
+    <script type="text/javascript" src="scripts/chart.js"></script>
+    <script type="text/javascript" src="scripts/csv.js"></script>
     <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -19,6 +19,9 @@
         <input type="text" id="complexity" value="0.75">
         <label for="density">Density:</label>
         <input type="text" id="density" value="0.3">
+        <label for="playercount">Player Count:</label>
+        <input type="text" id="playercount" value="20">
+        </br>
         <label for="choice">Shape:</label>
         <select id="choiceShape">
             <option value="square">Square</option>
@@ -26,19 +29,23 @@
         </select>
         <label for="choice">Remove Stragglers:</label>
         <select id="choiceStragglers">
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-            </select>
-    
-
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
     </div>
     <div>
-        More complexity means less big rooms. </br>
-        More density means more squares.</br>
         <input id="generate" type="submit" value='Generate'>
         <input id="download" type="submit" value='Download as CSV'>
     </div>
     <div id='myChart'></div>
+    <div>
+        although it will work, anything above 0.5 density begins to look bad. (Without Stragglers)</br>
+        it can handle up to 100 players with a density of 1, without taking too long. </br>
+        maximum size is 140 x 140 </br>
+        maximum number of players is about 800 (with standard settings) </br>
+        it takes at maximum 1s to generate a map and spawn with standard settings.
+    </div>
+
 </body>
 
 <script>
@@ -47,9 +54,10 @@
         height = $('#height').val();
         complexity = $('#complexity').val();
         density = $('#density').val();
+        playercount = $('#playercount').val();
         markerShape = String($('#choiceShape').val());
         removeStragglers = ($('#choiceStragglers').val()) == "true";
-        updateChart(width, height, complexity, density, markerShape, removeStragglers);
+        updateChart(width, height, complexity, density, markerShape, removeStragglers, playercount);
     });
 
     $('#generate').click(function () {
@@ -57,15 +65,15 @@
         height = $('#height').val();
         complexity = $('#complexity').val();
         density = $('#density').val();
+        playercount = $('#playercount').val();
         markerShape = String($('#choiceShape').val());
         removeStragglers = ($('#choiceStragglers').val()) == "true";
-        updateChart(width, height, complexity, density, markerShape, removeStragglers);
+        updateChart(width, height, complexity, density, markerShape, removeStragglers, playercount);
     });
 
     $('#download').click(function () {
-        downloadExcel(points);
+        downloadExcel(walls);
     });
-
 </script>
 
 </html>
