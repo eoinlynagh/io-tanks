@@ -12,7 +12,8 @@ function updateChart(width, height, complexity, density, markerShape, removeStra
     }
 
     maze = makeMaze(width, height, complexity, density, removeStragglers);
-    points = mazePoints(maze);
+    walls = mazePoints(maze);
+    spawns = mazeSpawns(maze, height, width);
     scaleHeight = height * 1 + 1;
     var myConfig1 = {
         type: "scatter",
@@ -27,12 +28,12 @@ function updateChart(width, height, complexity, density, markerShape, removeStra
                 size: 8.4,
                 type: markerShape,
                 borderColor: "blue",
-                backgroundColor: "blue",
             },
         },
         series: [{
-            values: points
-        }]
+            values: walls},{
+            values: spawns}
+        ]
     };
 
     zingchart.render({

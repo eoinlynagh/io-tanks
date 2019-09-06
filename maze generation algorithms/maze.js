@@ -49,7 +49,7 @@ function makeMaze(height, width, complexity, density, removeStragglers) {
 }
 
 function mazePoints(maze) {
-    points = []
+    points = [];
     for (i = 0; i < maze.length; i++) {
         for (j = 0; j < maze[i].length; j++) {
             if (maze[i][j] == 1) {
@@ -60,9 +60,42 @@ function mazePoints(maze) {
     return points;
 }
 
+//havent decided between 3 or 4 walls cant be beside
+function mazeSpawns(maze, height, width) {
+    points = [];
+    count = 0;
+    while (count < 20) {
+        i = getRandomL(width - 1, 2);
+        j = getRandomL(height - 1, 2);
+
+        //either 0 or 1 for best
+        sum = maze[i + 2][j] + maze[i - 2][j] + maze[i][j + 2] + maze[i][j - 2];
+
+        if (maze[i][j] == 0) {
+            if (sum <= 1) {
+                // Thisif (maze[i + 2][j + 2] == 0 && maze[i - 2][j - 2] == 0 && maze[i - 2][j + 2] == 0 && maze[i + 2][j - 2] == 0) {
+                    maze[i][j] = 1;
+                    points.push([i, j])
+                    count++;
+                //}
+            }
+        }
+    }
+    return points;
+}
+
 //returns a number in range 0 to highest - 1
 function getRandom(highest) {
     return Math.floor((Math.random() * highest) + 0);
+}
+
+//returns a number in range 0 to highest - 1
+function getRandomL(highest, lowest) {
+    random = Math.floor((Math.random() * (highest - lowest)) + lowest);
+    if (random % 2 != 0) {
+        random++;
+    }
+    return random;
 }
 
 //turns the sizes into odd numbers and creates a shape array
