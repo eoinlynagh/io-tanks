@@ -1,0 +1,16 @@
+tanks:
+    - match or battle royale
+    - powerups or different tanks
+    - map generation
+        - https://en.wikipedia.org/wiki/Maze_generation_algorithm
+            - I like the Recursive division method as it has a high density of tunnels
+            - Has python and C exmaples
+                - I will change to JS for fun why not
+        - dynamic:
+            - generate at runtime
+                - differing experience
+            - generate several in advance
+                - i.e
+            - generate one every day/week/month
+            - one static maze
+                - higher skill ceiling?

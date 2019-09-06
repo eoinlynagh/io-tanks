@@ -1,0 +1,28 @@
+GitKraken
+    - always pull before working on anything! We may be able to set an auto-fetch in gitkraken
+    - branching strategy:
+        - branch off of dev, which will be merged into master every time we feel like code is finalized enough to be in the final project
+            - obviously still changeable
+        - branch off of dev for changes to code
+            - all changes to code require a branch
+        - never work on a branch that has already been merged into the dev branch
+        - use good names for branches and commits
+            - you can sort branches into files by using a '/' in the name of the branch
+                - e.x: 'controls/mouse changes' might be an alright name
+                - we could use an agile method to assign tasks to ourselves every week or two, and that will allow for easier names.
+                    - this will be hard without experience
+            - we can create catagories
+                - these can correspond to dev phase, date, or what is being worked on
+        - pull requests should be created, with the other person being assigned as the reviewer
+            - they will approve it (if they want!) and complete the merge
+        
+code editor
+    - you wanted to use sublime, I will be using vs code
+        - if we run into problems building we may want to switch to visual studio, but im not sure how good it is for osx
+    - I will be using an extension called "Beautify" for styling
+        - if you get it we will have consistent styling, or I can style everything, it's not a huge deal
+        - https://beautifier.io/
+            - many online beautifiers :)
+
+NPM 
+    - i've never used it before, so I will have to look into it
