@@ -1,0 +1,66 @@
+    - gitkraken
+    - spin to parry
+        - cooldown?
+        - hyper-spinning?
+        - can only have one bullet at a time
+        - some tanks have different attachments
+    - left
+    - gameplay
+        - objectives
+            - kill players --> bonus
+                - powerups
+                - level up
+                    - choice vs automatic
+        - game states
+    - bomberman
+    - powerups
+        - nothing that prevents death
+
+
+controls:
+    - left click shoot
+        - bullets go straigt
+        - bullets bounce
+            - homing bounces
+    - right click
+        - dodge
+        - in direction of barrell
+        - could have i frames
+    - WASD/ARROW keys
+
+gamemode:
+    - short games, quick in and 
+    - easy to control (anyone familar with wasd)
+        - Tank controls?
+            - needs testing for sure
+    - easy to understand (family members get it after 2 games)
+    - tank should always be in the center(?)
+    - knowledge of paths when going down it
+    - paths should be x3 wide as the player
+    - match vs ongoing
+        - match
+            - pros:
+                - fun different game modes
+                - set teams (coop and known teams)
+                    - games could have an ID
+                - static, no level up (easy development)
+                    - need diversity
+                        - different tanks maybe
+                - easier to manage, and localise
+                    - geo distribution
+                        - less lag
+                - better user experience with small teams
+                - make maps seperate depending the size of the players
+            - cons:
+                - waiting time between games
+                - limited game size
+        - ongoing games:
+            - pros
+                - no wait time
+                - larger size games
+                - less generation of maps
+                - powerups for dynamic leveling
+                - better for larger player base (more chaos)
+                - LEADERBOARD
+                    - only one winner
+                - 
