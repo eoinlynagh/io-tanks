@@ -35,8 +35,6 @@ function makeMaze(height, width, complexity, density, removeStragglers) {
             }
         }
     }
-
-    //or we could prevent tanks from spawning in inaccessible area, like 3/4 directions must be clear for it to spawn there, which would prevent like almost every case 
     //prevents stragglers from spawning
     if (removeStragglers) {
         for (i = 2; i < Z.length - 2; i++) {
