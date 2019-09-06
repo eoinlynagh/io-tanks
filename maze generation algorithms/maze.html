@@ -18,11 +18,17 @@
         <label for="density">Density:</label>
         <input type="text" id="density" value="0.3">
         <label for="choice">Shape:</label>
-        <select id="choice"> 
+        <select id="choice">
             <option value="square">Square</option>
             <option value="circle">Circle</option>
         </select>
+
+    </div>
+    <div>
+        More complexity means less big rooms. </br>
+        More density means more squares.</br>
         <input id="generate" type="submit" value='Generate'>
+        <input id="download" type="submit" value='Download as CSV'>
     </div>
     <div id='myChart'></div>
 </body>
@@ -32,8 +38,8 @@
 
         markerShape = String($('#choice').val());
 
-        if (density > 2 || complexity > 5) {
-            alert("please set density to less than 2, and complexity to less than 5");
+        if (density > 1 || complexity > 1) {
+            alert("please set density and complexity to less than 1");
             return false;
         }
 
@@ -44,7 +50,7 @@
 
         maze = makeMaze(width, height, complexity, density);
         points = mazePoints(maze);
-        scaleHeight = height*1 + 1;
+        scaleHeight = height * 1 + 1;
         var myConfig1 = {
             type: "scatter",
             'scale-x': {
@@ -81,6 +87,10 @@
         density = $('#density').val();
 
         updateChart(width, height, complexity, density);
+    });
+
+    $('#download').click(function () {
+        downloadExcel(points);
     });
 
     $(document).ready(function () {

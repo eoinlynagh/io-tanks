@@ -41,6 +41,16 @@ function makeMaze(height, width, complexity, density) {
             }
         }
     }
+
+    //need to have something here to prevent inaccessible tiles from being created
+    //or we could prevent tanks from spawning in inaccessible area, like all 4 directions must be clear for it to spawn there
+    // for (i = 2; i < Z.length - 2; i++) {
+    //     for (j = 2; j < Z[0].length - 2; j++) {
+    //         if (Z[i + 2][j] == 1 && Z[i - 2][j] && Z[i][j + 2] == 1 && Z[i][j-2] == 1){
+    //             Z[i][j] = 1;
+    //         }
+    //     }
+    // }
     return Z;
 }
 
