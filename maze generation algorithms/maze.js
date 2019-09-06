@@ -78,9 +78,9 @@ function mazeSpawns(maze, height, width, max = 20) {
             if (sum <= 1) {
                 // uncomment these to prevent it from being placed next to diagonals
                 // if (maze[i + 2][j + 2] == 0 && maze[i - 2][j - 2] == 0 && maze[i - 2][j + 2] == 0 && maze[i + 2][j - 2] == 0) {
-                    maze[i][j] = 1;
-                    points.push([i, j])
-                    count++;
+                maze[i][j] = 1;
+                points.push([i, j])
+                count++;
                 //}
             }
         }

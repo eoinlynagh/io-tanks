@@ -32,7 +32,8 @@ function updateChart(width, height, complexity, density, markerShape, removeStra
             },
         },
         series: [{
-            values: walls},{
+            values: walls
+        }, {
             values: spawns,
             marker: {
                 size: 4,
@@ -40,8 +41,7 @@ function updateChart(width, height, complexity, density, markerShape, removeStra
                 borderColor: "black",
                 backgroundColor: "red",
             },
-        }
-        ]
+        }]
     };
 
     zingchart.render({
