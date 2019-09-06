@@ -1,0 +1,3 @@
+tanks:
+    - match or battle royale
+    - powerups or different tanks

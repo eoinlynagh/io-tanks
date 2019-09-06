@@ -1,3 +1,5 @@
+We should split this up to organize this better
+    
     - gitkraken
     - spin to parry
         - cooldown?
