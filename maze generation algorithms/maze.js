@@ -61,10 +61,10 @@ function mazePoints(maze) {
 }
 
 //havent decided between 3 or 4 walls cant be beside
-function mazeSpawns(maze, height, width) {
+function mazeSpawns(maze, height, width, max = 20) {
     points = [];
     count = 0;
-    while (count < 20) {
+    while (count < max) {
         i = getRandomL(width - 1, 2);
         j = getRandomL(height - 1, 2);
 

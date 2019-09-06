@@ -1,5 +1,5 @@
 //generates a maze chart based on some variables, need a reference to maze.js to use this
-function updateChart(width, height, complexity, density, markerShape, removeStragglers) {
+function updateChart(width, height, complexity, density, markerShape, removeStragglers, playercount) {
 
     if (density > 1 || complexity > 1) {
         alert("please set density and complexity to less than 1");
@@ -13,7 +13,7 @@ function updateChart(width, height, complexity, density, markerShape, removeStra
 
     maze = makeMaze(width, height, complexity, density, removeStragglers);
     walls = mazePoints(maze);
-    spawns = mazeSpawns(maze, height, width);
+    spawns = mazeSpawns(maze, height, width, playercount);
     scaleHeight = height * 1 + 1;
     var myConfig1 = {
         type: "scatter",
@@ -28,11 +28,19 @@ function updateChart(width, height, complexity, density, markerShape, removeStra
                 size: 8.4,
                 type: markerShape,
                 borderColor: "blue",
+                backgroundColor: "blue"
             },
         },
         series: [{
             values: walls},{
-            values: spawns}
+            values: spawns,
+            marker: {
+                size: 4,
+                type: markerShape,
+                borderColor: "black",
+                backgroundColor: "red",
+            },
+        }
         ]
     };
 
