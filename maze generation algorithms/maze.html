@@ -38,6 +38,11 @@
         <input id="download" type="submit" value='Download as CSV'>
     </div>
     <div id='myChart'></div>
+    <div>
+        although it will work, anything above 0.5 density begins to look bad. (Without Stragglers)</br>
+        it can handle up to 100 players with a density of 1, without taking too long. </br>
+    </div>
+
 </body>
 
 <script>
@@ -64,7 +69,7 @@
     });
 
     $('#download').click(function () {
-        downloadExcel(points);
+        downloadExcel(walls);
     });
 
 </script>

@@ -14,14 +14,14 @@ function updateChart(width, height, complexity, density, markerShape, removeStra
     maze = makeMaze(width, height, complexity, density, removeStragglers);
     walls = mazePoints(maze);
     spawns = mazeSpawns(maze, height, width, playercount);
-    scaleHeight = height * 1 + 1;
+    scaleHeight = height * 1 + 2;
     var myConfig1 = {
         type: "scatter",
         'scale-x': {
-            values: "0:" + width + ":1",
+            values: "0:" + width + ":2",
         },
         'scale-y': {
-            values: "0:" + scaleHeight + ":1",
+            values: "0:" + scaleHeight + ":2",
         },
         plot: {
             marker: {
