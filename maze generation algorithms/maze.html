@@ -1,0 +1,60 @@
+<html>
+
+<head>
+    <script type="text/javascript" src="maze.js"></script>
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id="inputs">
+        <label for="width">Width:</label>
+        <input type="text" id="width" value="81">
+        <label for="height">Height:</label>
+        <input type="text" id="height" value="51">
+        <label for="complexity">Complexity:</label>
+        <input type="text" id="complexity" value="0.75">
+        <label for="density">Density:</label>
+        <input type="text" id="density" value="0.75">
+    </div>
+    <div id='myChart'></div>
+</body>
+
+<script>
+    function updateChart() {
+        width = $('#width').val();
+        height = $('#height').val();
+        complexity = $('#complexity').val();
+        density = $('#density').val();
+
+        if(density > 6 || complexity > 50) {
+            alert("please set density to less than 6, and complexity to less than 50");
+            return false;
+        }
+
+        maze = makeMaze(width, height, complexity, density);
+        points = mazePoints(maze);
+        var myConfig1 = {
+            "type": "scatter",
+            "series": [{
+                "values": points
+            }]
+        };
+
+        zingchart.render({
+            id: 'myChart',
+            data: myConfig1,
+            height: "100%",
+            width: "100%"
+        });
+    }
+
+    $('input').focusout(function(){
+        updateChart();
+    });
+
+    updateChart();
+</script>
+
+</html>
