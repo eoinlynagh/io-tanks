@@ -37,6 +37,16 @@ game-mode:
     - tank should always be in the center(?)
     - knowledge of paths when going down it
     - paths should be x3 wide as the player
+    - different kinds of walls, holes
+        - bouncy walls which accelerate
+        - slow walls
+        - holes in ground
+        - holes in wall
+    - right click is switchable
+        - offensive, defense, and mobility
+            - defense: shield
+            - mobility: dash
+            - offense: denoatable missles, more explosive, faster and more bounces
     - match vs ongoing
         - match
             - pros:
