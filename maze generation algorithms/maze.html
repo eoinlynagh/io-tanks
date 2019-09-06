@@ -30,6 +30,7 @@
 
         if (width * height > 100 * 200) {
             alert("Please set product of width and height to less than 20000");
+            return false;
         }
 
         maze = makeMaze(width, height, complexity, density);
