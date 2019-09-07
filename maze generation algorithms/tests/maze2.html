@@ -1,12 +1,15 @@
 <html>
 
+<!--needs bootstrap-->
+
 <head>
-    <script type="text/javascript" src="scripts/maze.js"></script>
-    <script type="text/javascript" src="scripts/chart.js"></script>
-    <script type="text/javascript" src="scripts/csv.js"></script>
+    <script type="text/javascript" src="../scripts/chart.js"></script>
+    <script type="text/javascript" src="../scripts/maze.js"></script>
+    <script type="text/javascript" src="../scripts/csv.js"></script>
     <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <!--Bootstrap-->
 </head>
 
 <body>
@@ -36,6 +39,9 @@
     <div>
         <input id="generate" type="submit" value='Generate'>
         <input id="download" type="submit" value='Download as CSV'>
+    </div>
+    <div>
+        <canvas id="game" width="800" height="800"></canvas>
     </div>
     <div id='myChart'></div>
     <div>
@@ -69,7 +75,11 @@
         markerShape = String($('#choiceShape').val());
         removeStragglers = ($('#choiceStragglers').val()) == "true";
         updateChart(width, height, complexity, density, markerShape, removeStragglers, playercount);
+
+        console.log(i);
+
     });
+
 
     $('#download').click(function () {
         downloadExcel(walls);
