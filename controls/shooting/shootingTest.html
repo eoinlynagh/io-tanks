@@ -1,55 +1,103 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>Gamedev Canvas Workshop</title>
     <style>
-    	* { padding: 0; margin: 0; }
-    	canvas { background: #eee; display: block; margin: 0 auto; }
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        canvas {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+        }
     </style>
 </head>
+
 <body>
+    </br>
+    <canvas onclick="shoot()" id="myCanvas" width="480" height="320"></canvas>
 
-<canvas onclick="shoot()" id="myCanvas" width="480" height="320"></canvas>
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
 
-<script>
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
+        bullet = false;
 
-    var x = canvas.width/2, y = canvas.height-30;
-    var speed = .5;
-    var angle = 333*Math.PI/180;
+        var x = canvas.width / 2,
+            y = canvas.height - 30;
+        var speed = 10;
+        var angle = 333 * Math.PI / 180;
 
-    function drawBall(){
-        ctx.beginPath();
-        ctx.arc(x,y,10,0,Math.PI*2)
-        ctx.fillStyle = "#0095DD";
-        ctx.fill();
-        ctx.closePath();
-    }
+        var bounceCount = 0;
 
-    function draw(){
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawBall();
-    }
+        function drawBullet() {
+            ctx.beginPath();
+            ctx.arc(x, y, 2, 0, Math.PI * 2)
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
 
-    function shoot(){
-        mousePosition = getMousePos(canvas,event);
-        dx =(mousePosition.x - x);
-        dy =(mousePosition.y - y);
-        console.log(Math.atan2(dy, dx)*180/Math.PI)
-    }
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height - 30, 10, 0, Math.PI * 2)
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
 
-    function getMousePos(canvas, evt) {
-        var rect = canvas.getBoundingClientRect();
-        return {
-          x: evt.clientX - rect.left,
-          y: evt.clientY - rect.top
-        };
-      }
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBall();
+            if (bullet) {
+                drawBullet();
+                x += Math.cos(angle) * speed;
+                y += Math.sin(angle) * speed;
 
-    setInterval(draw,10)
-</script>
+                if (y < 0 || y > 320 || x < 0 || x > 480) {
+                    bounceCount++;
+                    if (bounceCount > 2) {
+                        bullet = false;
+                        x = canvas.width / 2,
+                        y = canvas.height - 30;
+                        speed = 0;
+                        bounceCount = 0;
+                    }
+                    speed = -speed;
+                    //have to figure out angles :/
+                    }
+                }
+            }
+        }
+        
+        function shoot() {
+            if (bullet == false) {
+                speed = 10;
+                mousePosition = getMousePos(canvas, event);
+                dx = (mousePosition.x - x);
+                dy = (mousePosition.y - y);
+                angle = Math.atan2(dy, dx);
+                
+                bullet = true;
+            }
+        }
+
+        function getMousePos(canvas, evt) {
+            var rect = canvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
+        }
+
+        setInterval(draw, 100)
+    </script>
 
 </body>
+
 </html>
