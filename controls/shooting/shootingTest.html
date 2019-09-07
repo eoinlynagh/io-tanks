@@ -61,20 +61,26 @@
 
                 if (y < 0 || y > 320 || x < 0 || x > 480) {
                     bounceCount++;
-                    if (bounceCount > 2) {
+                    if (bounceCount > 20) {
                         bullet = false;
                         x = canvas.width / 2,
-                        y = canvas.height - 30;
+                            y = canvas.height - 30;
                         speed = 0;
                         bounceCount = 0;
                     }
-                    speed = -speed;
-                    //have to figure out angles :/
+                    //horizontal surface
+                    if(y < 0 || y > 320){
+                        angle = -angle;
+                    }
+                    //vertical surface
+                    else{
+                        angle = Math.PI - angle;
                     }
                 }
             }
         }
         
+
         function shoot() {
             if (bullet == false) {
                 speed = 10;
@@ -82,7 +88,7 @@
                 dx = (mousePosition.x - x);
                 dy = (mousePosition.y - y);
                 angle = Math.atan2(dy, dx);
-                
+
                 bullet = true;
             }
         }
@@ -95,7 +101,7 @@
             };
         }
 
-        setInterval(draw, 100)
+        setInterval(draw, 10)
     </script>
 
 </body>
