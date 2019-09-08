@@ -14,7 +14,7 @@ function game(canvas, ctx, walls) {
         wall[1] *= Math.round(wallSize);
 
         wall[0] -= Math.round(brickSize/2);
-        wall[1] -= Math.round(brickSize/2);
+        wall[1] -= 1.5*Math.round(brickSize/2);
 
     });
 
