@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Gamedev Canvas Workshop</title>
+    <title>Maze Shooter</title>
     <style>
         * {
             padding: 0;
@@ -22,10 +22,14 @@
 
 <body>
     </br>
-    <canvas onclick="shoot()" id="myCanvas" width="410" height="410"></canvas>
+    <canvas onclick="shoot()" id="myCanvas" width="2001" height="2001"></canvas>
 
     <script>
-        maze = makeMaze(100, 100, .75, 0.3, true);
+        mazeSize = 100;
+        mazeComplexity = .75;
+        mazeDensity = 0.3;
+        removeStragglers = true;
+        maze = makeMaze(mazeSize, mazeSize, mazeComplexity, mazeDensity, removeStragglers);
         walls = mazePoints(maze);
 
         var canvas = document.getElementById('myCanvas');

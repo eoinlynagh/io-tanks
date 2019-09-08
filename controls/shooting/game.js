@@ -1,38 +1,40 @@
 function game(canvas, ctx, walls) {
-    walls.forEach(wall => {
-        wall[0] *= 4;
-        wall[1] *= 4;
-    });
 
-    
+    wallSize = canvas.width / 100;
 
+    //game settings
     interval = 10
     canvasWidth = canvas.width;
     canvasHeight = canvas.height;
 
-    //player options
-    playerRadius = 10;
+    //brick options
+    brickSize = wallSize * 2;
+    walls.forEach(wall => {
+        wall[0] *= Math.round(wallSize);
+        wall[1] *= Math.round(wallSize);
+
+        wall[0] -= Math.round(brickSize/2);
+        wall[1] -= Math.round(brickSize/2);
+
+    });
+
+    //players options
+    playerRadius = brickSize;
     playerColor = "#0095DD";
-    playerPosition = [canvas.width / 2, canvas.height - 30]
+    player2Color = "#0095DD";
+    playerPosition = [canvas.width / 2, canvas.height - brickSize * 2]
 
     //bullet options
-    bulletRadius = 2;
-    maxBounceCount = 200;
+    bulletRadius = brickSize / 4;
+    maxBounceCount = 20;
     bulletColor = "#0095DD"
-    speed = 1;
+    speed = brickSize / 10;
     x = playerPosition[0]
     y = playerPosition[1]
     angle = 666;
     bullet = false;
     bounceCount = 0;
-
-    //brick options
-    brickSize = 8;
-    positions = walls;
-
-    //hole options
-    holeRadius = 10;
-    holePosition = [20, 300];
+    lastBounce = -666;
 
     function drawBullet() {
         ctx.beginPath();
@@ -51,9 +53,9 @@ function game(canvas, ctx, walls) {
     }
 
     function drawBricks() {
-        for (var i = 0; i < positions.length; i++) {
-            brickX = positions[i][0];
-            brickY = positions[i][1];
+        for (var i = 0; i < walls.length; i++) {
+            brickX = walls[i][0];
+            brickY = walls[i][1];
 
             ctx.beginPath();
             ctx.rect(brickX, brickY, brickSize, brickSize);
@@ -63,25 +65,33 @@ function game(canvas, ctx, walls) {
 
         }
     }
-
+    //make it so it can't bounce off the same block 2 times in a row
     function collision() {
         if (y <= 0 || y >= canvasHeight || x <= 0 || x >= canvasWidth) {
             if (y <= 0 || y > canvasHeight) {
                 horizontalCollision();
                 return
+
             } else {
                 verticalCollision();
                 return
             }
         }
-        for (i = 0; i < positions.length; i++) {
-            result = checkColl(x, y, positions[i]);
+        for (pos = 0; pos < walls.length; pos++) {
+            result = checkColl(x, y, walls[pos]);
             if (result > 0) {
+                //debugger;
+                currentBounce = [walls[pos][0], walls[pos][1]];
+                if (lastBounce[0] == currentBounce[0] && lastBounce[1] == currentBounce[1]) {
+                    return;
+                }
                 if (result % 2 == 0) {
                     verticalCollision();
+                    lastBounce = [walls[pos][0], walls[pos][1]];
                     return
                 } else {
                     horizontalCollision();
+                    lastBounce = [walls[pos][0], walls[pos][1]];
                     return
                 }
             }
@@ -90,8 +100,9 @@ function game(canvas, ctx, walls) {
 
     function checkColl(x, y, brick) {
         //console.log(brick[0])
-
-        if (!((x >= brick[0] && x <= brick[0] + brickSize) && (y >= brick[1] && y <= brick[1] + brickSize))) {
+        //modifer makes it so it bounces when the outside of the ball hits
+        modifier = bulletRadius;
+        if (!((x >= brick[0] - modifier && x <= brick[0] + brickSize + modifier) && (y >= brick[1] - modifier && y <= brick[1] + brickSize + modifier))) {
             return 0;
         }
 
@@ -100,7 +111,7 @@ function game(canvas, ctx, walls) {
         side3 = [brick[0] + brickSize / 2, brick[1] + brickSize];
         side4 = [brick[0] + brickSize, brick[1] + brickSize / 2];
         //debugger;
-        console.log(side1, side2, side3, side4);
+        //console.log(side1, side2, side3, side4);
 
         sides = [side1, side2, side3, side4];
 
@@ -122,7 +133,7 @@ function game(canvas, ctx, walls) {
             }
         }
         closest++
-        console.log(closest)
+        //console.log(closest)
         return closest;
     }
 
@@ -133,7 +144,9 @@ function game(canvas, ctx, walls) {
 
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        collision();
+        if (bullet) {
+            collision();
+        }
         drawBall();
         drawBricks();
         if (bullet) {
