@@ -6,6 +6,8 @@ function game(canvas, ctx, walls) {
     interval = 10
     canvasWidth = canvas.width;
     canvasHeight = canvas.height;
+    oldTurn = 666;
+    maxBounceCount = 2;
 
     //brick options
     brickSize = wallSize * 2;
@@ -13,8 +15,8 @@ function game(canvas, ctx, walls) {
         wall[0] *= Math.round(wallSize);
         wall[1] *= Math.round(wallSize);
 
-        wall[0] -= Math.round(brickSize/2);
-        wall[1] -= 1.5*Math.round(brickSize/2);
+        wall[0] -= Math.round(brickSize / 2);
+        wall[1] -= 1.5 * Math.round(brickSize / 2);
 
     });
 
@@ -23,11 +25,18 @@ function game(canvas, ctx, walls) {
     playerColor = "#0095DD";
     player2Color = "#0095DD";
     playerPosition = [canvas.width / 2, canvas.height - brickSize * 2]
+    currentPlayerX = playerPosition[0];
+    currentPlayerY = playerPosition[1];
+
+    //players options
+    player2Radius = brickSize;
+    player2Color = "red";
+    player2Position = [canvas.width / 2, brickSize * 2]
 
     //bullet options
     bulletRadius = brickSize / 4;
-    maxBounceCount = 20;
     bulletColor = "#0095DD"
+    bullet2Color = "red"
     speed = brickSize / 10;
     x = playerPosition[0]
     y = playerPosition[1]
@@ -50,6 +59,12 @@ function game(canvas, ctx, walls) {
         ctx.fillStyle = playerColor;
         ctx.fill();
         ctx.closePath();
+
+        ctx.beginPath();
+        ctx.arc(player2Position[0], player2Position[1], playerRadius, 0, Math.PI * 2)
+        ctx.fillStyle = player2Color;
+        ctx.fill();
+        ctx.closePath();
     }
 
     function drawBricks() {
@@ -59,7 +74,7 @@ function game(canvas, ctx, walls) {
 
             ctx.beginPath();
             ctx.rect(brickX, brickY, brickSize, brickSize);
-            ctx.fillStyle = "#8814";
+            ctx.fillStyle = "#884";
             ctx.fill();
             ctx.closePath();
 
@@ -172,12 +187,13 @@ function game(canvas, ctx, walls) {
         bounceCount++;
         if (bounceCount > maxBounceCount) {
             bullet = false;
-            x = playerPosition[0],
-                y = playerPosition[1];
+            x = currentPlayerX,
+                y = currentPlayerY;
             bounceCount = 0;
         }
 
     }
+
 
     setInterval(draw, interval)
 }
