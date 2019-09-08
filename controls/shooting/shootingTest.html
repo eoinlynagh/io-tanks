@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <script type="text/javascript" src="game.js"></script>
+<script type="text/javascript" src="../../maze generation algorithms/scripts/maze.js"></script>
 
 <head>
     <meta charset="utf-8" />
@@ -21,17 +22,15 @@
 
 <body>
     </br>
-    <canvas onclick="shoot()" id="myCanvas" width="400" height="400"></canvas>
+    <canvas onclick="shoot()" id="myCanvas" width="410" height="410"></canvas>
 
     <script>
-        points = [
-            [10, 10],
-            [200, 200],
-            [200, 20]
-        ]
+        maze = makeMaze(100, 100, .75, 0.3, true);
+        walls = mazePoints(maze);
+
         var canvas = document.getElementById('myCanvas');
         var ctx = canvas.getContext('2d');
-        game(points, canvas, ctx);
+
 
         function getMousePos(canvas, evt) {
             var rect = canvas.getBoundingClientRect();
@@ -41,6 +40,7 @@
             };
 
         }
+
         function shoot() {
             if (bullet == false) {
                 mousePosition = getMousePos(canvas, event);
@@ -50,6 +50,8 @@
                 bullet = true;
             }
         }
+        
+        game(canvas,ctx,walls)
     </script>
 
 </body>
