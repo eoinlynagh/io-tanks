@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<script type="text/javascript" src="game.js"></script>
+<script type="text/javascript" src="../../maze generation algorithms/scripts/maze.js"></script>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Gamedev Canvas Workshop</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        canvas {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    </br>
+    <canvas onclick="shoot()" id="myCanvas" width="410" height="410"></canvas>
+
+    <script>
+        maze = makeMaze(100, 100, .75, 0.3, true);
+        walls = mazePoints(maze);
+
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+
+
+        function getMousePos(canvas, evt) {
+            var rect = canvas.getBoundingClientRect();
+            return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+            };
+
+        }
+
+        function shoot() {
+            if (bullet == false) {
+                mousePosition = getMousePos(canvas, event);
+                dx = (mousePosition.x - x);
+                dy = (mousePosition.y - y);
+                angle = Math.atan2(dy, dx);
+                bullet = true;
+            }
+        }
+        
+        game(canvas,ctx,walls)
+    </script>
+
+</body>
+
+</html>
