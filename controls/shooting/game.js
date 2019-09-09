@@ -7,7 +7,7 @@ function game(canvas, ctx, walls) {
     canvasWidth = canvas.width;
     canvasHeight = canvas.height;
     oldTurn = 666;
-    maxBounceCount = 2;
+    maxBounceCount = 4;
 
     //brick options
     brickSize = wallSize * 2;
@@ -59,6 +59,19 @@ function game(canvas, ctx, walls) {
         ctx.fillStyle = playerColor;
         ctx.fill();
         ctx.closePath();
+        if(turn && !bullet && count < 3){
+        ctx.beginPath();
+        ctx.arc(playerPosition[0], playerPosition[1], speed*100, 0, Math.PI * 2)
+        ctx.lineWidth = brickSize/5;
+        ctx.stroke();
+        ctx.closePath();
+        }else if(!bullet && count < 3){
+            ctx.beginPath();
+        ctx.arc(player2Position[0], player2Position[1], speed*100, 0, Math.PI * 2)
+        ctx.lineWidth = brickSize/5;
+        ctx.stroke();
+        ctx.closePath();
+        }
 
         ctx.beginPath();
         ctx.arc(player2Position[0], player2Position[1], playerRadius, 0, Math.PI * 2)
@@ -91,6 +104,12 @@ function game(canvas, ctx, walls) {
                 verticalCollision();
                 return
             }
+        }
+        if(turn && bullet && (x + bulletRadius >= playerPosition[0] && x - bulletRadius <= playerPosition[0])&&(y + bulletRadius >= playerPosition[1]&&y - bulletRadius <= playerPosition[1])){
+            console.log("player 1 loses")
+        }
+        if(!turn && bullet && (x + bulletRadius >= player2Position[0] && x - bulletRadius <= player2Position[0])&&(y + bulletRadius >= player2Position[1]&&y - bulletRadius <= player2Position[1])){
+            console.log("player 2 loses")
         }
         for (pos = 0; pos < walls.length; pos++) {
             result = checkColl(x, y, walls[pos]);
