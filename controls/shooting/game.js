@@ -11,6 +11,7 @@ function game(canvas, ctx, walls) {
 
     //brick options
     brickSize = wallSize * 2;
+    brickColour = "lightgreen";
     walls.forEach(wall => {
         wall[0] *= Math.round(wallSize);
         wall[1] *= Math.round(wallSize);
@@ -49,9 +50,12 @@ function game(canvas, ctx, walls) {
         ctx.beginPath();
         ctx.arc(x, y, bulletRadius, 0, Math.PI * 2)
         //set to bullet colour for it to have an effect
-        if(turn){ctx.fillStyle = bullet2Color;}
-        else{ctx.fillStyle = bulletColor;}
-        
+        if (turn) {
+            ctx.fillStyle = bullet2Color;
+        } else {
+            ctx.fillStyle = bulletColor;
+        }
+
         ctx.fill();
         ctx.closePath();
     }
@@ -62,18 +66,21 @@ function game(canvas, ctx, walls) {
         ctx.fillStyle = playerColor;
         ctx.fill();
         ctx.closePath();
-        if(turn && !bullet && count < 3){
-        ctx.beginPath();
-        ctx.arc(playerPosition[0], playerPosition[1], speed*100, 0, Math.PI * 2)
-        ctx.lineWidth = brickSize/5;
-        ctx.stroke();
-        ctx.closePath();
-        }else if(!bullet && count < 3){
+
+        if (turn && !bullet && count < 3) {
             ctx.beginPath();
-        ctx.arc(player2Position[0], player2Position[1], speed*100, 0, Math.PI * 2)
-        ctx.lineWidth = brickSize/5;
-        ctx.stroke();
-        ctx.closePath();
+            ctx.arc(playerPosition[0], playerPosition[1], speed * 100, 0, Math.PI * 2)
+            ctx.lineWidth = brickSize / 5;
+            ctx.strokeStyle = "white";
+            ctx.stroke();
+            ctx.closePath();
+        } else if (!bullet && count < 3) {
+            ctx.beginPath();
+            ctx.arc(player2Position[0], player2Position[1], speed * 100, 0, Math.PI * 2)
+            ctx.lineWidth = brickSize / 5;
+            ctx.strokeStyle = "white";
+            ctx.stroke();
+            ctx.closePath();
         }
 
         ctx.beginPath();
@@ -90,8 +97,9 @@ function game(canvas, ctx, walls) {
 
             ctx.beginPath();
             ctx.rect(brickX, brickY, brickSize, brickSize);
-            ctx.fillStyle = "#884";
-            ctx.fill();
+            ctx.fillStyle = brickColour;
+            ctx.strokeStyle = "green";
+            ctx.stroke();
             ctx.closePath();
 
         }
@@ -108,13 +116,13 @@ function game(canvas, ctx, walls) {
                 return
             }
         }
-        if(turn && bullet && (x + bulletRadius >= playerPosition[0] - playerRadius && x - bulletRadius <= playerPosition[0] + playerRadius)&&(y + bulletRadius >= playerPosition[1] - playerRadius &&y - bulletRadius <= playerPosition[1] + playerRadius)){
-            speed = -speed*2;
+        if (turn && bullet && (x >= playerPosition[0] - playerRadius && x <= playerPosition[0] + playerRadius) && (y >= playerPosition[1] - playerRadius && y <= playerPosition[1] + playerRadius)) {
+            speed = -speed * 2;
             alert("player 1 loses");
             location.reload(true);
         }
-        if(!turn && bullet && (x + bulletRadius >= player2Position[0] - playerRadius && x - bulletRadius <= player2Position[0] + playerRadius)&&(y + bulletRadius >= player2Position[1] - playerRadius&&y - bulletRadius <= player2Position[1] + playerRadius)){
-            speed = -speed*2;
+        if (!turn && bullet && (x >= player2Position[0] - playerRadius && x <= player2Position[0] + playerRadius) && (y >= player2Position[1] - playerRadius && y <= player2Position[1] + playerRadius)) {
+            speed = -speed * 2;
             alert("player 2 loses");
             location.reload(true);
         }
@@ -186,12 +194,13 @@ function game(canvas, ctx, walls) {
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawBall();
-            if (bullet) {
-                collision();
-            }
+        if (bullet) {
+            collision();
+        }
         drawBricks();
         if (bullet) {
             drawBullet();
+            //may need to change these so that they check if they are inside a wall before moving
             x += Math.cos(angle) * speed;
             y += Math.sin(angle) * speed;
         }
