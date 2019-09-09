@@ -34,7 +34,7 @@ function game(canvas, ctx, walls) {
     player2Position = [canvas.width / 2, brickSize * 2]
 
     //bullet options
-    bulletRadius = brickSize / 4;
+    bulletRadius = brickSize / 4
     bulletColor = "#0095DD"
     bullet2Color = "red"
     speed = brickSize / 10;
@@ -48,7 +48,10 @@ function game(canvas, ctx, walls) {
     function drawBullet() {
         ctx.beginPath();
         ctx.arc(x, y, bulletRadius, 0, Math.PI * 2)
-        ctx.fillStyle = bulletColor;
+        //set to bullet colour for it to have an effect
+        if(turn){ctx.fillStyle = bullet2Color;}
+        else{ctx.fillStyle = bulletColor;}
+        
         ctx.fill();
         ctx.closePath();
     }
@@ -105,11 +108,13 @@ function game(canvas, ctx, walls) {
                 return
             }
         }
-        if(turn && bullet && (x + bulletRadius >= playerPosition[0] && x - bulletRadius <= playerPosition[0])&&(y + bulletRadius >= playerPosition[1]&&y - bulletRadius <= playerPosition[1])){
-            console.log("player 1 loses")
+        if(turn && bullet && (x + bulletRadius >= playerPosition[0] - playerRadius && x - bulletRadius <= playerPosition[0] + playerRadius)&&(y + bulletRadius >= playerPosition[1] - playerRadius &&y - bulletRadius <= playerPosition[1] + playerRadius)){
+            alert("player 1 loses");
+            location.reload(true);
         }
-        if(!turn && bullet && (x + bulletRadius >= player2Position[0] && x - bulletRadius <= player2Position[0])&&(y + bulletRadius >= player2Position[1]&&y - bulletRadius <= player2Position[1])){
-            console.log("player 2 loses")
+        if(!turn && bullet && (x + bulletRadius >= player2Position[0] - playerRadius && x - bulletRadius <= player2Position[0] + playerRadius)&&(y + bulletRadius >= player2Position[1] - playerRadius&&y - bulletRadius <= player2Position[1] + playerRadius)){
+            alert("player 2 loses");
+            location.reload(true);
         }
         for (pos = 0; pos < walls.length; pos++) {
             result = checkColl(x, y, walls[pos]);
