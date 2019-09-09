@@ -22,12 +22,14 @@
 
 <body>
     </br>
-    <canvas oncontextmenu="move()" onclick="shoot()" id="myCanvas" width="3500" height="3500"></canvas>
+    <canvas oncontextmenu="move()" onclick="shoot()" id="myCanvas" width="3001" height="3001"></canvas>
     <script>
-        mazeSize = 100;
+        mazeSize = 150;
         mazeComplexity = 1;
-        mazeDensity = 0.15;
+        mazeDensity = 0.2;
         removeStragglers = true;
+        turns = 0;
+
 
         maze = makeMaze(mazeSize, mazeSize, mazeComplexity, mazeDensity, removeStragglers);
         wallsO = mazePoints(maze);
@@ -49,7 +51,7 @@
         }
 
         function shoot() {
-            if (bullet == false && count < 3) {
+            if (turns > 0 && bullet == false && count < 3) {
                 x = currentPlayerX;
                 y = currentPlayerY;
                 switchTurns();
@@ -109,6 +111,7 @@
 
         function switchTurns() {
             turn = !turn;
+            turns++;
             count = 0
             if (currentPlayerX == playerPosition[0] && currentPlayerY == playerPosition[1]) {
                 currentPlayerX = player2Position[0];

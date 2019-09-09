@@ -1,6 +1,6 @@
 function game(canvas, ctx, walls) {
 
-    wallSize = canvas.width / 100;
+    wallSize = canvas.width / mazeSize;
 
     //game settings
     interval = 10
@@ -37,7 +37,7 @@ function game(canvas, ctx, walls) {
     bulletRadius = brickSize / 4
     bulletColor = "#0095DD"
     bullet2Color = "red"
-    speed = brickSize / 10;
+    speed = wallSize / 5 + mazeSize / 300;
     x = playerPosition[0]
     y = playerPosition[1]
     angle = 666;
@@ -185,10 +185,10 @@ function game(canvas, ctx, walls) {
 
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (bullet) {
-            collision();
-        }
         drawBall();
+            if (bullet) {
+                collision();
+            }
         drawBricks();
         if (bullet) {
             drawBullet();
