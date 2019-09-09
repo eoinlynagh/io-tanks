@@ -60,6 +60,7 @@
         }
 
         function move() {
+            event.preventDefault();
             if(bullet) {return;}
             if (count <= 3) {
                 playerMousePosition = getMousePos(canvas, event);
