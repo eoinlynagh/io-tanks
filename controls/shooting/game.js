@@ -109,10 +109,12 @@ function game(canvas, ctx, walls) {
             }
         }
         if(turn && bullet && (x + bulletRadius >= playerPosition[0] - playerRadius && x - bulletRadius <= playerPosition[0] + playerRadius)&&(y + bulletRadius >= playerPosition[1] - playerRadius &&y - bulletRadius <= playerPosition[1] + playerRadius)){
+            speed = -speed*2;
             alert("player 1 loses");
             location.reload(true);
         }
         if(!turn && bullet && (x + bulletRadius >= player2Position[0] - playerRadius && x - bulletRadius <= player2Position[0] + playerRadius)&&(y + bulletRadius >= player2Position[1] - playerRadius&&y - bulletRadius <= player2Position[1] + playerRadius)){
+            speed = -speed*2;
             alert("player 2 loses");
             location.reload(true);
         }
