@@ -50,7 +50,7 @@
 
         function shoot() {
             if (bullet == false) {
-                turn = !turn
+                switchTurns();
                 mousePosition = getMousePos(canvas, event);
                 dx = (mousePosition.x - x);
                 dy = (mousePosition.y - y);
@@ -61,8 +61,12 @@
 
         function move() {
             event.preventDefault();
-            if(bullet) {return;}
-            if (count <= 3) {
+            if (bullet) {
+                return;
+            }
+            if (count < 3) {
+                count++;
+
                 playerMousePosition = getMousePos(canvas, event);
                 playerDx = (playerMousePosition.x - currentPlayerX);
                 playerDy = (playerMousePosition.y - currentPlayerY);
@@ -85,11 +89,19 @@
                 x = currentPlayerX;
                 y = currentPlayerY;
 
-            } else {
-                alert("next players turn")
-                turn = !turn;
-                count = 0
             }
+        }
+
+        function switchTurns(){
+            turn = !turn;
+                count = 0
+                if (currentPlayerX == playerPosition[0] && currentPlayerY == playerPosition[1]) {
+                    currentPlayerX = player2Position[0];
+                    currentPlayerY = player2Position[1];
+                } else {
+                    currentPlayerX = playerPosition[0];
+                    currentPlayerY = playerPosition[1];
+                }
         }
 
 
