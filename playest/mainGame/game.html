@@ -2,6 +2,8 @@
 <html>
 <script type="text/javascript" src="game.js"></script>
 <script type="text/javascript" src="../../maze generation algorithms/scripts/maze.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
 <head>
     <meta charset="utf-8" />
@@ -22,13 +24,19 @@
 
 <body>
     </br>
-    <canvas oncontextmenu="move()" onclick="shoot()" style="background:black" id="myCanvas" width="3001" height="3001"></canvas>
+    <p id="coordinates">HEllo</p>
+    <canvas onmouseup="lineStarted()" onmousedown="lineStopped()" onmousemove="line()" oncontextmenu="move()"
+        onclick="shoot()" style="background:black" id="myCanvas" width="3001" height="3001"></canvas>
     <script>
-        mazeSize = 150;
+        coordinates = $('#coordinates')
+        mazeSize = 50;
         mazeComplexity = 1;
-        mazeDensity = 0.2;
+        mazeDensity = 0.3;
         removeStragglers = true;
         turns = 0;
+
+        lStopped = true;
+
 
 
         maze = makeMaze(mazeSize, mazeSize, mazeComplexity, mazeDensity, removeStragglers);
@@ -70,7 +78,7 @@
             }
             if (count < 3) {
                 count++;
-                
+
                 playerMousePosition = getMousePos(canvas, event);
                 playerDx = (playerMousePosition.x - currentPlayerX);
                 playerDy = (playerMousePosition.y - currentPlayerY);
@@ -105,7 +113,10 @@
 
                 x = currentPlayerX;
                 y = currentPlayerY;
-                if(count == 3){switchTurns(); return;}
+                if (count == 3) {
+                    switchTurns();
+                    return;
+                }
             }
         }
 
@@ -127,6 +138,23 @@
             return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
         }
 
+        function line() {
+            mousePosition = getMousePos(canvas, event);
+            lineDx = (mousePosition.x - currentPlayerX);
+            lineDy = (mousePosition.y - currentPlayerY);
+            lineAngle = Math.atan2(lineDy, lineDx);
+
+        }
+
+        function lineStopped() {
+            //console.log('hello')
+            lStopped = false;
+        }
+
+        function lineStarted() {
+            //console.log('bye')
+            lStopped = true;
+        }
         game(canvas, ctx, wallsO)
     </script>
 
