@@ -22,18 +22,23 @@
 
 <body>
     </br>
-    <canvas onclick="shoot()" id="myCanvas" width="2001" height="2001"></canvas>
-
+    <canvas oncontextmenu="move()" onclick="shoot()" style="background:black" id="myCanvas" width="3001" height="3001"></canvas>
     <script>
-        mazeSize = 100;
-        mazeComplexity = .75;
-        mazeDensity = 0.3;
+        mazeSize = 150;
+        mazeComplexity = 1;
+        mazeDensity = 0.2;
         removeStragglers = true;
+        turns = 0;
+
+
         maze = makeMaze(mazeSize, mazeSize, mazeComplexity, mazeDensity, removeStragglers);
-        walls = mazePoints(maze);
+        wallsO = mazePoints(maze);
 
         var canvas = document.getElementById('myCanvas');
         var ctx = canvas.getContext('2d');
+
+        count = 0;
+        turn = true;
 
 
         function getMousePos(canvas, evt) {
@@ -46,7 +51,10 @@
         }
 
         function shoot() {
-            if (bullet == false) {
+            if (turns > 0 && bullet == false && count < 3) {
+                x = currentPlayerX;
+                y = currentPlayerY;
+                switchTurns();
                 mousePosition = getMousePos(canvas, event);
                 dx = (mousePosition.x - x);
                 dy = (mousePosition.y - y);
@@ -54,8 +62,72 @@
                 bullet = true;
             }
         }
-        
-        game(canvas,ctx,walls)
+
+        function move() {
+            event.preventDefault();
+            if (bullet) {
+                return;
+            }
+            if (count < 3) {
+                count++;
+                
+                playerMousePosition = getMousePos(canvas, event);
+                playerDx = (playerMousePosition.x - currentPlayerX);
+                playerDy = (playerMousePosition.y - currentPlayerY);
+                playerAngle = Math.atan2(playerDy, playerDx);
+
+                maxX = Math.cos(playerAngle) * 100 * speed;
+                maxY = Math.sin(playerAngle) * 100 * speed;
+
+                if (turn) {
+                    if (getDistanceBetween(playerDx, playerDy) >= getDistanceBetween(maxX, maxY)) {
+                        playerPosition[0] += maxX;
+                        playerPosition[1] += maxY;
+                    } else {
+                        playerPosition[0] += playerDx;
+                        playerPosition[1] += playerDy;
+                    }
+                    currentPlayerX = playerPosition[0];
+                    currentPlayerY = playerPosition[1];
+
+
+                } else {
+                    if (getDistanceBetween(playerDx, playerDy) >= getDistanceBetween(maxX, maxY)) {
+                        player2Position[0] += maxX;
+                        player2Position[1] += maxY;
+                    } else {
+                        player2Position[0] += playerDx;
+                        player2Position[1] += playerDy;
+                    }
+                    currentPlayerX = player2Position[0];
+                    currentPlayerY = player2Position[1];
+                }
+
+                x = currentPlayerX;
+                y = currentPlayerY;
+                if(count == 3){switchTurns(); return;}
+            }
+        }
+
+        function switchTurns() {
+            turn = !turn;
+            turns++;
+            count = 0
+            if (currentPlayerX == playerPosition[0] && currentPlayerY == playerPosition[1]) {
+                currentPlayerX = player2Position[0];
+                currentPlayerY = player2Position[1];
+            } else {
+                currentPlayerX = playerPosition[0];
+                currentPlayerY = playerPosition[1];
+            }
+        }
+
+
+        function getDistanceBetween(x, y) {
+            return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        }
+
+        game(canvas, ctx, wallsO)
     </script>
 
 </body>
