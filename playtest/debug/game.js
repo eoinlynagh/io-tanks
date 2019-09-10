@@ -340,11 +340,6 @@ function game(canvas, ctx, walls) {
     //     return true;
     // }
 
-    function updateLine() {
-        lineHeadXt
-
-    }
-
 
     setInterval(draw, interval)
 }
