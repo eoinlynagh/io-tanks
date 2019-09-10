@@ -8,6 +8,8 @@ function game(canvas, ctx, walls) {
     canvasHeight = canvas.height;
     oldTurn = 666;
     maxBounceCount = 4;
+    frames = 0
+    lastFrame = 10;
 
     //brick options
     brickSize = wallSize * 2;
@@ -46,6 +48,13 @@ function game(canvas, ctx, walls) {
     bounceCount = 0;
     lastBounce = -666;
 
+    //line options
+    lineBullets = []
+    lineSpeed = speed;
+    lineAngle = angle;
+    disableLineBounce = true;
+
+
     function drawBullet() {
         ctx.beginPath();
         ctx.arc(x, y, bulletRadius, 0, Math.PI * 2)
@@ -59,6 +68,30 @@ function game(canvas, ctx, walls) {
         ctx.fill();
         ctx.closePath();
     }
+
+    function drawLine() {
+        for (i = 0; i < mazeSize*10; i++) {
+            lineX = prevX + (Math.cos(lineAngle) * lineSpeed)
+            lineY = prevY + (Math.sin(lineAngle) * lineSpeed)
+            prevX = lineX;
+            prevY = lineY;
+            if (bulletCollisions(lineX, lineY, false)) {
+                if (disableLineBounce) {
+                    break;
+                }
+            }
+        }
+        ctx.beginPath();
+        ctx.moveTo(currentPlayerX, currentPlayerY);
+        ctx.lineTo(lineX, lineY);
+        ctx.stroke();
+        ctx.closePath();
+
+
+
+
+    }
+
 
     function drawBall() {
         ctx.beginPath();
@@ -87,6 +120,10 @@ function game(canvas, ctx, walls) {
         ctx.arc(player2Position[0], player2Position[1], playerRadius, 0, Math.PI * 2)
         ctx.fillStyle = player2Color;
         ctx.fill();
+
+
+
+
         ctx.closePath();
     }
 
@@ -101,6 +138,7 @@ function game(canvas, ctx, walls) {
             ctx.strokeStyle = "green";
             ctx.stroke();
             ctx.closePath();
+
 
         }
     }
@@ -126,25 +164,35 @@ function game(canvas, ctx, walls) {
             alert("player 2 loses");
             location.reload(true);
         }
+        return bulletCollisions(x, y, true);
+    }
+
+    function bulletCollisions(x, y, noteCollision) {
         for (pos = 0; pos < walls.length; pos++) {
             result = checkColl(x, y, walls[pos]);
             if (result > 0) {
-                //debugger;
-                currentBounce = [walls[pos][0], walls[pos][1]];
-                if (lastBounce[0] == currentBounce[0] && lastBounce[1] == currentBounce[1]) {
-                    return;
+                if (noteCollision) {
+                    currentBounce = [walls[pos][0], walls[pos][1]]
+                };
+                if (noteCollision && lastBounce[0] == currentBounce[0] && lastBounce[1] == currentBounce[1]) {
+                    return false;
                 }
                 if (result % 2 == 0) {
-                    verticalCollision();
-                    lastBounce = [walls[pos][0], walls[pos][1]];
-                    return
+                    verticalCollision(noteCollision);
+                    if (noteCollision) {
+                        lastBounce = [walls[pos][0], walls[pos][1]];
+                    }
+                    return true
                 } else {
-                    horizontalCollision();
-                    lastBounce = [walls[pos][0], walls[pos][1]];
-                    return
+                    horizontalCollision(noteCollision);
+                    if (noteCollision) {
+                        lastBounce = [walls[pos][0], walls[pos][1]];
+                    }
+                    return true
                 }
             }
         }
+        return false;
     }
 
     function checkColl(x, y, brick) {
@@ -192,6 +240,7 @@ function game(canvas, ctx, walls) {
 
 
     function draw() {
+        frames++;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawBall();
         if (bullet) {
@@ -205,16 +254,26 @@ function game(canvas, ctx, walls) {
             y += Math.sin(angle) * speed;
         }
 
+        if (turns > 0 && !lStopped && !bullet) {
+            prevX = currentPlayerX;
+            prevY = currentPlayerY;
+            drawLine();
+        }
+
     }
 
-    function horizontalCollision() {
-        bounce();
-        angle = -angle;
+    function horizontalCollision(noteCollision) {
+        if (noteCollision) {
+            bounce();
+            angle = -angle;
+        }
     }
 
-    function verticalCollision() {
-        bounce();
-        angle = Math.PI - angle;
+    function verticalCollision(noteCollision) {
+        if (noteCollision) {
+            bounce();
+            angle = Math.PI - angle;
+        }
     }
 
     function bounce() {
@@ -226,6 +285,22 @@ function game(canvas, ctx, walls) {
                 y = currentPlayerY;
             bounceCount = 0;
         }
+
+    }
+
+    // function line(){
+    //     mousePosition = getMousePos(canvas, event);
+    //     lineDx = (mousePosition.x - currentPlayerX);
+    //     lineDy = (mousePosition.y - currentPlayerY);
+    //     lineAngle = Math.atan2(lineDx, lineDy);
+    // }
+
+    // function lineStopped(){
+    //     return true;
+    // }
+
+    function updateLine() {
+        lineHeadXt
 
     }
 
