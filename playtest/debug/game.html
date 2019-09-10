@@ -33,7 +33,7 @@
         mazeDensity = 0.3;
         removeStragglers = true;
         turns = 5;
-        maxCount = 666;
+        maxCount = 3;
 
         lStopped = true;
 
@@ -84,8 +84,8 @@
                 playerDy = (playerMousePosition.y - currentPlayerY);
                 playerAngle = Math.atan2(playerDy, playerDx);
 
-                maxX = Math.cos(playerAngle) * 100 * speed;
-                maxY = Math.sin(playerAngle) * 100 * speed;
+                maxX = Math.cos(playerAngle) * moveMultipler * speed;
+                maxY = Math.sin(playerAngle) * moveMultipler * speed;
 
                 if (turn) {
                     if (getDistanceBetween(playerDx, playerDy) >= getDistanceBetween(maxX, maxY)) {
