@@ -93,6 +93,7 @@ function game(canvas, ctx, walls) {
     }
 
     function drawBall() {
+        moveMultipler = 75;
         ctx.beginPath();
         ctx.arc(playerPosition[0], playerPosition[1], playerRadius, 0, Math.PI * 2)
         ctx.fillStyle = playerColor;
@@ -101,18 +102,50 @@ function game(canvas, ctx, walls) {
 
         if (turn && !bullet && count < maxCount) {
             ctx.beginPath();
-            ctx.arc(playerPosition[0], playerPosition[1], speed * 100, 0, Math.PI * 2)
+            ctx.arc(playerPosition[0], playerPosition[1], speed * moveMultipler, 0, Math.PI * 2)
             ctx.lineWidth = brickSize / 5;
-            ctx.strokeStyle = "white";
+            ctx.strokeStyle = "green";
             ctx.stroke();
             ctx.closePath();
+            if (count + 1 < maxCount) {
+                ctx.beginPath();
+                ctx.arc(playerPosition[0], playerPosition[1], speed * 2 * moveMultipler, 0, Math.PI * 2)
+                ctx.lineWidth = brickSize / 5;
+                ctx.strokeStyle = "yellow";
+                ctx.stroke();
+                ctx.closePath();
+            }
+            if (count + 2 < maxCount) {
+                ctx.beginPath();
+                ctx.arc(playerPosition[0], playerPosition[1], speed * 3 * moveMultipler, 0, Math.PI * 2)
+                ctx.lineWidth = brickSize / 5;
+                ctx.strokeStyle = "red";
+                ctx.stroke();
+                ctx.closePath();
+            }
         } else if (!bullet && count < maxCount) {
             ctx.beginPath();
-            ctx.arc(player2Position[0], player2Position[1], speed * 100, 0, Math.PI * 2)
+            ctx.arc(player2Position[0], player2Position[1], speed * moveMultipler, 0, Math.PI * 2)
             ctx.lineWidth = brickSize / 5;
-            ctx.strokeStyle = "white";
+            ctx.strokeStyle = "green";
             ctx.stroke();
-            ctx.closePath();
+            ctx.beginPath();
+            if (count + 1 < maxCount) {
+                ctx.beginPath();
+                ctx.arc(player2Position[0], player2Position[1], speed * 2 * moveMultipler, 0, Math.PI * 2)
+                ctx.lineWidth = brickSize / 5;
+                ctx.strokeStyle = "yellow";
+                ctx.stroke();
+                ctx.closePath();
+            }
+            if (count + 2 < maxCount) {
+                ctx.beginPath();
+                ctx.arc(player2Position[0], player2Position[1], speed * 3 * moveMultipler, 0, Math.PI * 2)
+                ctx.lineWidth = brickSize / 5;
+                ctx.strokeStyle = "red";
+                ctx.stroke();
+                ctx.closePath();
+            }
         }
 
         ctx.beginPath();
@@ -134,7 +167,7 @@ function game(canvas, ctx, walls) {
             ctx.beginPath();
             ctx.rect(brickX, brickY, brickSize, brickSize);
             ctx.fillStyle = brickColour;
-            ctx.strokeStyle = "green";
+            ctx.strokeStyle = "lightblue";
             ctx.stroke();
             ctx.closePath();
 
@@ -253,12 +286,12 @@ function game(canvas, ctx, walls) {
             //if these intersect with any boxes then they should be reduced
             collision();
             drawBullet();
-            
+
             dx = Math.cos(angle) * speed;
             dy = Math.sin(angle) * speed;
             x += dx;
             y += dy;
-            
+
         }
         if (turns > 0 && !lStopped && !bullet) {
             prevX = currentPlayerX;
