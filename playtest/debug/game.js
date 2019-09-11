@@ -174,56 +174,45 @@ function game(canvas, ctx, walls) {
 
         }
     }
+
     //make it so it can't bounce off the same block 2 times in a row
     function collision() {
-        collisionX = x + 0;
-        collisionY = y + 0;
+        collisionX = x + dx;
+        collisionY = y + dy;
+
         if (collisionY <= 0 || collisionY >= canvasHeight || collisionX <= 0 || collisionX >= canvasWidth) {
             if (collisionY <= 0 || collisionY > canvasHeight) {
                 horizontalCollision();
-                return
+                return true
 
             } else {
                 verticalCollision();
-                return
+                return true
             }
         }
-        // if (turn && bullet && (x >= playerPosition[0] - playerRadius && x <= playerPosition[0] + playerRadius) && (y >= playerPosition[1] - playerRadius && y <= playerPosition[1] + playerRadius)) {
-        //     speed = -speed * 2;
-        //     alert("player 1 loses");
-        //     location.reload(true);
-        // }
-        // if (!turn && bullet && (x >= player2Position[0] - playerRadius && x <= player2Position[0] + playerRadius) && (y >= player2Position[1] - playerRadius && y <= player2Position[1] + playerRadius)) {
-        //     speed = -speed * 2;
-        //     alert("player 2 loses");
-        //     location.reload(true);
-        // }
-        return bulletCollisions(collisionX, collisionY, true);
+        return bulletCollisions(collisionX, collisionY);
     }
 
-    function bulletCollisions(collX, collY, noteCollision) {
+    function bulletCollisions(collX, collY) {
         for (pos = 0; pos < walls.length; pos++) {
-            result = checkColl(collX, collY, walls[pos]);
+
+            result = brickSideCollision(collX, collY, walls[pos]);
+            //****1
+            //2*|----|
+            //**|----|4
+            //*****3
             if (result > 0) {
-                if (noteCollision) {
-                    currentBounce = [walls[pos][0], walls[pos][1]]
-                };
-                if (noteCollision && lastBounce[0] == currentBounce[0] && lastBounce[1] == currentBounce[1]) {
+                currentBounce = [walls[pos][0], walls[pos][1]]
+                if (lastBounce[0] == currentBounce[0] && lastBounce[1] == currentBounce[1]) {
                     return false;
                 }
                 if (result % 2 == 0) {
-                    verticalCollision(noteCollision);
-                    if (noteCollision) {
-                        lastBounce = [walls[pos][0], walls[pos][1]];
-                        return true
-                    }
+                    verticalCollision();
+                    lastBounce = [walls[pos][0], walls[pos][1]];
                     return true
                 } else {
-                    horizontalCollision(noteCollision);
-                    if (noteCollision) {
-                        lastBounce = [walls[pos][0], walls[pos][1]];
-                        return true
-                    }
+                    horizontalCollision();
+                    lastBounce = [walls[pos][0], walls[pos][1]];
                     return true
                 }
             }
@@ -231,45 +220,39 @@ function game(canvas, ctx, walls) {
         return false;
     }
 
-    function checkColl(bulletX, bulletY, brick) {
+    function brickSideCollision(bulletX, bulletY, brick) {
 
-
-        //bc ball teleports it can move past the wall so we should change collision to check the next move, instead of the current one
-        modifier = bulletRadius;
-        if (!((bulletX > brick[0] - modifier && bulletX < brick[0] + brickSize + modifier) && (bulletY > brick[1] - modifier && bulletY < brick[1] + brickSize + modifier))) {
+        if (checkOutside()) {
             return 0;
         }
+        sides = getSides();
 
-        //console.log('collision')
-        //what if we move these
-        side1 = [brick[0] + brickSize / 2, brick[1]];
-        side2 = [brick[0], brick[1] + brickSize / 2];
-        side3 = [brick[0] + brickSize / 2, brick[1] + brickSize];
-        side4 = [brick[0] + brickSize, brick[1] + brickSize / 2];
-        //debugger;
-        //console.log(side1, side2, side3, side4);
-
-        sides = [side1, side2, side3, side4];
-        distance = 2000000000000;
+        distanceToSide = mazeSize;
         closest = 5;
-
-        /*
-        _1_
-        |   |  4
-        2  |___|
-        3
-        */
-        //bounces off the closest side
         for (i = 0; i < sides.length; i++) {
             cmp = getDistance(bulletX, bulletY, sides[i])
-            if (cmp < distance) {
-                distance = cmp;
+            if (cmp < distanceToSide) {
+                distanceToSide = cmp;
                 closest = i;
             }
 
         }
-        closest++
+
+        closest++;
         return closest;
+
+        function checkOutside() {
+            modifier = bulletRadius/2;
+            return !((bulletX > brick[0] - modifier && bulletX < brick[0] + brickSize + modifier) && (bulletY > brick[1] - modifier && bulletY < brick[1] + brickSize + modifier));
+        }
+
+        function getSides() {
+            side1 = [brick[0] + brickSize / 2, brick[1]];
+            side2 = [brick[0], brick[1] + brickSize / 2];
+            side3 = [brick[0] + brickSize / 2, brick[1] + brickSize];
+            side4 = [brick[0] + brickSize, brick[1] + brickSize / 2];
+            return [side1, side2, side3, side4];
+        }
     }
 
     function getDistance(distX, distY, side) {
@@ -283,12 +266,21 @@ function game(canvas, ctx, walls) {
         drawBall();
         drawBricks();
         if (bullet) {
-            //if these intersect with any boxes then they should be reduced
-            collision();
-            drawBullet();
-
+            
             dx = Math.cos(angle) * speed;
             dy = Math.sin(angle) * speed;
+
+            prevAngle = angle;
+
+            if(collision()){
+                debugger;
+                //it is going to collide on the next frame
+                //need the distance between the center of the circle and the place of intersection
+                //move the ball the wall
+            }
+            drawBullet();
+
+
             x += dx;
             y += dy;
 
@@ -303,18 +295,16 @@ function game(canvas, ctx, walls) {
 
     }
 
-    function horizontalCollision(noteCollision) {
-        if (noteCollision) {
-            bounce();
-            angle = -angle;
-        }
+    function horizontalCollision() {
+        bounce();
+        angle = -angle;
+
     }
 
-    function verticalCollision(noteCollision) {
-        if (noteCollision) {
-            bounce();
-            angle = Math.PI - angle;
-        }
+    function verticalCollision() {
+        bounce();
+        angle = Math.PI - angle;
+
     }
 
     function bounce() {
