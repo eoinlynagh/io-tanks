@@ -32,6 +32,8 @@
         mazeDensity = 0.3;
         removeStragglers = true;
         turns = 0;
+        maxCount = 3;
+        moveMultiplier = 75;
         
         lStopped = true;
 
@@ -58,12 +60,12 @@
 
         function shoot() {
             if (turns > 0 && bullet == false && count < 3) {
-                x = currentPlayerX;
-                y = currentPlayerY;
+                bulletCoordinates[0] = currentPlayerX;
+                bulletCoordinates[1] = currentPlayerY;
                 switchTurns();
                 mousePosition = getMousePos(canvas, event);
-                dx = (mousePosition.x - x);
-                dy = (mousePosition.y - y);
+                dx = (mousePosition.x - bulletCoordinates[0]);
+                dy = (mousePosition.y - bulletCoordinates[1]);
                 angle = Math.atan2(dy, dx);
                 bullet = true;
             }
@@ -74,7 +76,7 @@
             if (bullet) {
                 return;
             }
-            if (count < 3) {
+            if (count < maxCount) {
                 count++;
 
                 playerMousePosition = getMousePos(canvas, event);
@@ -82,8 +84,8 @@
                 playerDy = (playerMousePosition.y - currentPlayerY);
                 playerAngle = Math.atan2(playerDy, playerDx);
 
-                maxX = Math.cos(playerAngle) * 100 * speed;
-                maxY = Math.sin(playerAngle) * 100 * speed;
+                maxX = Math.cos(playerAngle) * moveMultiplier * speed;
+                maxY = Math.sin(playerAngle) * moveMultiplier * speed;
 
                 if (turn) {
                     if (getDistanceBetween(playerDx, playerDy) >= getDistanceBetween(maxX, maxY)) {
@@ -109,9 +111,9 @@
                     currentPlayerY = player2Position[1];
                 }
 
-                x = currentPlayerX;
-                y = currentPlayerY;
-                if (count == 3) {
+                bulletCoordinates[0] = currentPlayerX;
+                bulletCoordinates[1] = currentPlayerY;
+                if (count == maxCount) {
                     switchTurns();
                     return;
                 }
