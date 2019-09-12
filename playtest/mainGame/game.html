@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
-<script type="text/javascript" src="game.js"></script>
-<script type="text/javascript" src="../../maze generation algorithms/scripts/maze.js"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-
 <head>
     <meta charset="utf-8" />
+    <script type="text/javascript" src="scripts/settings.js"></script>
+    <script type="text/javascript" src="scripts/collision.js"></script>
+    <script type="text/javascript" src="scripts/math.js"></script>
+    <script type="text/javascript" src="scripts/draw.js"></script>
+    <script type="text/javascript" src="../../maze generation algorithms/scripts/maze.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <title>Maze Shooter</title>
     <style>
         * {
@@ -27,28 +29,12 @@
     <canvas onmouseup="lineStarted()" onmousedown="lineStopped()" onmousemove="line()" oncontextmenu="move()"
         onclick="shoot()" style="background:black" id="myCanvas" width="3001" height="3001"></canvas>
     <script>
-        //are variable
-        mazeSize = 100;
-        mazeComplexity = 1;
-        mazeDensity = 0.3;
-        removeStragglers = true;
-        maxCount = 3; //number of times a player can move
-        moveMultiplier = 75;
-        
-        //should remain constant
-        turns = 0;
-        count = 0;
-        turn = true;
-        lStopped = true;
-        
 
         maze = makeMaze(mazeSize, mazeSize, mazeComplexity, mazeDensity, removeStragglers);
         wallsO = mazePoints(maze);
 
-        var canvas = document.getElementById('myCanvas');
-        var ctx = canvas.getContext('2d');
-
-
+        canvas = document.getElementById('myCanvas');
+        ctx = canvas.getContext('2d');
 
         function getMousePos(canvas, evt) {
             var rect = canvas.getBoundingClientRect();
@@ -132,10 +118,6 @@
                 currentPlayerX = playerPosition[0];
                 currentPlayerY = playerPosition[1];
             }
-        }
-
-        function getHypotenuse(x, y) {
-            return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
         }
 
         function line() {

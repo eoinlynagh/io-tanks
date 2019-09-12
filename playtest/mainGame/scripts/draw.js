@@ -1,30 +1,3 @@
-//game settings
-interval = 10
-maxBounceCount = 4;
-
-//brick options
-brickColour = "lightblue";
-shiftDownModifier = 1.5;
-
-//players options
-playerColor = "#0095DD";
-player2Color = "red";
-
-//bullet options
-bulletColor = "#0095DD"
-bullet2Color = "red"
-
-//line options
-lineColour = "white"
-disableLineBounce = true;
-
-//do not change these generally
-alreadyHit = false;
-angle = 666;
-bullet = false;
-bounceCount = 0;
-lastBounce = -666;
-
 function game(canvas, ctx, walls) {
     
     //canvas settings
@@ -64,11 +37,11 @@ function game(canvas, ctx, walls) {
         drawBricks();
         if (bullet) {
 
-            dx = Math.cos(angle) * speed;
-            dy = Math.sin(angle) * speed;
+            var dx = Math.cos(angle) * speed;
+            var dy = Math.sin(angle) * speed;
 
             if (collision()) {
-                collisionInfo = getBlockBulletIntersection(bulletCoordinates[0], bulletCoordinates[1], dx, dy, lastBounce);
+                var collisionInfo = getBlockBulletIntersection(bulletCoordinates[0], bulletCoordinates[1], dx, dy, lastBounce);
                 bulletCoordinates = collisionInfo[0];
                 getBounce(collisionInfo[1]);
             } else {
@@ -83,6 +56,37 @@ function game(canvas, ctx, walls) {
             prevX = currentPlayerX;
             prevY = currentPlayerY;
             drawLine();
+        }
+
+        //checks if the bullet is colliding with any objects
+        function collision() {
+            var collisionX = bulletCoordinates[0] + dx;
+            var collisionY = bulletCoordinates[1] + dy;
+
+            if (collisionY <= 0 || collisionY >= canvasHeight || collisionX <= 0 || collisionX >= canvasWidth) {
+                if (collisionY <= 0 || collisionY > canvasHeight) {
+                    horizontalCollision();
+                    return true
+
+                } else {
+                    verticalCollision();
+                    return true
+                }
+            }
+
+            if (getDistance(collisionX - dx, collisionY - dy, playerPosition) < playerRadius + bulletRadius && !alreadyHit && bounceCount > 0) {
+                alreadyHit = true;
+                alert("player 1 killed");
+                location.reload();
+                return true
+            } else if (getDistance(collisionX - dx, collisionY - dy, player2Position) < playerRadius + bulletRadius && !alreadyHit && bounceCount > 0) {
+                alreadyHit = true;
+                alert("player 2 killed");
+                location.reload();
+                return true
+            }
+
+            return bulletCollisions(collisionX, collisionY, walls);
         }
 
         //sets the angle and bounce information corresponding which side is bounced off of 
@@ -113,7 +117,7 @@ function game(canvas, ctx, walls) {
 
             //updates proper variables on bounce
             function bounce() {
-                lastBounce = [-10, -10]
+                lastBounce = [-brickSize*2, -brickSize*2]
                 bounceCount++;
                 if (bounceCount > maxBounceCount) {
                     bullet = false;
@@ -234,8 +238,8 @@ function game(canvas, ctx, walls) {
         //draws all the bricks on screen
         function drawBricks() {
             for (var i = 0; i < walls.length; i++) {
-                brickX = walls[i][0];
-                brickY = walls[i][1];
+                var brickX = walls[i][0];
+                var brickY = walls[i][1];
 
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickSize, brickSize);
@@ -245,138 +249,8 @@ function game(canvas, ctx, walls) {
 
 
             }
-        }
-
-        //checks if the bullet is colliding with any objects
-        function collision() {
-            collisionX = bulletCoordinates[0] + dx;
-            collisionY = bulletCoordinates[1] + dy;
-
-            if (collisionY <= 0 || collisionY >= canvasHeight || collisionX <= 0 || collisionX >= canvasWidth) {
-                if (collisionY <= 0 || collisionY > canvasHeight) {
-                    horizontalCollision();
-                    return true
-
-                } else {
-                    verticalCollision();
-                    return true
-                }
-            }
-
-            if (getDistance(collisionX - dx, collisionY - dy, playerPosition) < playerRadius + bulletRadius && !alreadyHit && bounceCount > 0) {
-                alreadyHit = true;
-                alert("player 1 killed");
-                location.reload();
-                return true
-            } else if (getDistance(collisionX - dx, collisionY - dy, player2Position) < playerRadius + bulletRadius && !alreadyHit && bounceCount > 0) {
-                alreadyHit = true;
-                alert("player 2 killed");
-                location.reload();
-                return true
-            }
-
-            return bulletCollisions(collisionX, collisionY, walls);
-        }
+        }        
     }
 
     setInterval(draw, interval)
-}
-
-//if there is a collision, this moves the block to the point of intersection between the bullets path and the block, then changes the angle to reflect the collision
-function getBlockBulletIntersection(startX, startY, intersectDx, intersectDy, brick) {
-    //*****0
-    //**1|---|
-    //***|---|3
-    //*****2
-    endX = startX + intersectDx;
-    endY = startY + intersectDy;
-    //because collision returns true on player hit, this sanity check is needed for intended behvaiour
-    if (!brickCollision(endX, endY, brick)) {
-        return [endX, endY]
-    }
-    //slope and intersect
-    m = intersectDy / intersectDx;
-    b = endY - (m * endX)
-
-    //finds where the bullet path collides with the sqaure
-    potentialColl = getIntersections(brick, m, b);
-
-    minDistance = 90000000;
-    for (i = 0; i < potentialColl.length; i++) {
-        cmp = getDistance(startX, startY, potentialColl[i]);
-        if (cmp < minDistance) {
-            minDistance = cmp;
-            closest = potentialColl[i];
-            indexClosest = i;
-        }
-    }
-    //index is the side that is bouncing off of, so with that we can change the angle
-    return [closest, indexClosest]
-}
-
-//gets the intersections of a block with a line (defined as slope and intersect)
-function getIntersections(brick, m, b) {
-    brickLeftX = brick[0];
-    brickTopY = brick[1];
-    brickRightX = brick[0] + brickSize;
-    brickBottomY = brick[1] + brickSize;
-
-    collisionIntersect1 = [solveForX(brickTopY, m, b), brickTopY];
-    collisionIntersect2 = [brickLeftX, solveForY(m, brickLeftX, b)];
-    collisionIntersect3 = [solveForX(brickBottomY, m, b), brickBottomY];
-    collisionIntersect4 = [brickRightX, solveForY(m, brickRightX, b)];
-
-    return [collisionIntersect1, collisionIntersect2, collisionIntersect3, collisionIntersect4];
-}
-
-//gets a point on a line when you know the Y value
-function solveForX(knownY, m, b) {
-    return (knownY - b) / m;
-}
-
-//gets the point on a line when you know the X value
-function solveForY(m, knownX, b) {
-    return m * knownX + b
-}
-
-//gets the distance between 2 points
-function getDistance(distX, distY, coordinate) {
-    return Math.sqrt(Math.pow(Math.abs(distX - coordinate[0]), 2) + Math.pow(Math.abs(distY - coordinate[1]), 2));
-}
-
-//returns true if the x and y coordinates are contained within the block
-function brickCollision(bulletX, bulletY, brick) {
-    modifier = 0; //how far out the block collision extends
-    checkX = (bulletX >= brick[0] - modifier && bulletX <= brick[0] + brickSize + modifier);
-    checkY = (bulletY >= brick[1] - modifier && bulletY <= brick[1] + brickSize + modifier)
-    return (checkX && checkY);
-}
-
-//returns true if the bullet is colliding with a block, and a bullet cannot bounce off the same block twice
-function bulletCollisions(collX, collY, walls) {
-    for (pos = 0; pos < walls.length; pos++) {
-        result = brickCollision(collX, collY, walls[pos]);
-        if (result) {
-            currentBounce = [walls[pos][0], walls[pos][1]]
-            if (lastBounce[0] == currentBounce[0] && lastBounce[1] == currentBounce[1]) {
-                return false; //cant bounce on the same brick twice, also used to keep track of bricks hit
-            } else {
-                lastBounce = currentBounce;
-                return true
-            }
-        }
-    }
-    return false;
-}
-
-//returns true if the aim line is colliding with a block
-function lineCollisions(collX, collY, walls) {
-    for (pos = 0; pos < walls.length; pos++) {
-        result = brickCollision(collX, collY, walls[pos]);
-        if (result) {
-            return true
-        }
-
-    }
-    return false;
 }
