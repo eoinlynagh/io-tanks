@@ -20,7 +20,7 @@ moveMultiplier = 75; //size of the circle that the player moves in
 //bullet options
 bulletColor = "#0095DD"
 bullet2Color = "red"
-maxBounceCount = 1;
+maxBounceCount = 5;
 
 //line options
 lineColour = "white"

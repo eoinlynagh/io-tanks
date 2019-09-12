@@ -1,11 +1,15 @@
 //gets a point on a line when you know the Y value
-function solveForX(knownY, m, b) {
-    return (knownY - b) / m;
+function solveForX(knownY, m, b, upper, lower) {
+    var x = (knownY - b) / m;
+    if(lower <= x && x <= upper){return x;}
+    return -6666;
 }
 
 //gets the point on a line when you know the X value
-function solveForY(m, knownX, b) {
-    return m * knownX + b
+function solveForY(m, knownX, b, upper, lower) {
+    var y = m * knownX + b
+    if(lower <= y && y <= upper){return y;}
+    return -6666;
 }
 
 //gets the distance between 2 points

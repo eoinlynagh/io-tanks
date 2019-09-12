@@ -34,7 +34,7 @@ function getBlockBulletIntersection(startX, startY, intersectDx, intersectDy, br
     return [closest, indexClosest]
 }
 
-//checks that the point of intersection is between the start and end points
+//checks that the point of intersection is between the start and end
 function checkCentered(startX, startY, endX, endY, collision) {
     var condition1 = false;
     var condition2 = false;

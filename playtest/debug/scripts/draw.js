@@ -1,29 +1,29 @@
 function game(canvas, ctx, walls) {
-    
+
     //canvas settings
     var canvasWidth = canvas.width;
     var canvasHeight = canvas.height;
-    
+
     //wall options
     brickSize = Math.round(canvas.width / mazeSize * 2);
     walls.forEach(wall => { //this function moves the bricks over slightly to make them looks better on the canvas
         wall[0] *= Math.round(brickSize / 2);
         wall[1] *= Math.round(brickSize / 2);
-        
+
         wall[0] -= Math.round(brickSize / 2);
         wall[1] -= shiftDownModifier * Math.round(brickSize / 2);
     });
-    
+
     //player options
     playerRadius = brickSize;
     playerPosition = [canvas.width / 2, canvas.height - brickSize * 2]
     player2Position = [canvas.width / 2, brickSize * 2]
     currentPlayerX = playerPosition[0];
     currentPlayerY = playerPosition[1];
-    
+
     //bullet options
     bulletRadius = brickSize / 4
-    speed = brickSize / 10 + mazeSize / 300;
+    speed = 2 * brickSize / 10 + mazeSize / 300;
     bulletCoordinates = [playerPosition[0], playerPosition[1]]
 
     //line options
@@ -100,33 +100,32 @@ function game(canvas, ctx, walls) {
             } else {
                 verticalCollision();
             }
+        }
+        //bouncing of a horizontal side (side 1 or 3)
+        function horizontalCollision() {
+            bounce();
+            angle = -angle;
 
-            //bouncing of a horizontal side (side 1 or 3)
-            function horizontalCollision() {
-                bounce();
-                angle = -angle;
+        }
 
+        //bouncing off of a vertical side (side 0 or 2)
+        function verticalCollision() {
+            bounce();
+            angle = Math.PI - angle;
+
+        }
+
+        //updates proper variables on bounce
+        function bounce() {
+            lastBounce = [-brickSize * 2, -brickSize * 2]
+            bounceCount++;
+            if (bounceCount > maxBounceCount) {
+                bullet = false;
+                bulletCoordinates[0] = currentPlayerX,
+                    bulletCoordinates[1] = currentPlayerY;
+                bounceCount = 0;
             }
 
-            //bouncing off of a vertical side (side 0 or 2)
-            function verticalCollision() {
-                bounce();
-                angle = Math.PI - angle;
-
-            }
-
-            //updates proper variables on bounce
-            function bounce() {
-                lastBounce = [-brickSize*2, -brickSize*2]
-                bounceCount++;
-                if (bounceCount > maxBounceCount) {
-                    bullet = false;
-                    bulletCoordinates[0] = currentPlayerX,
-                        bulletCoordinates[1] = currentPlayerY;
-                    bounceCount = 0;
-                }
-
-            }
         }
 
         //draws the bullet at its coordinates
@@ -249,7 +248,7 @@ function game(canvas, ctx, walls) {
 
 
             }
-        }        
+        }
     }
 
     setInterval(draw, interval)

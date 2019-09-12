@@ -53,16 +53,17 @@ function checkCenter(startX, startY, endX, endY, collision) {
 }
 
 //gets the intersections of a block with a line (defined as slope and intersect)
+//needs to be edited to discard values that are out of bounds: change the solve for functions by giving them a lower and upper limit for the calculated value
 function getIntersections(brick, m, b) {
     var brickLeftX = brick[0];
     var brickTopY = brick[1];
     var brickRightX = brick[0] + brickSize;
     var brickBottomY = brick[1] + brickSize;
 
-    var collisionIntersect1 = [solveForX(brickTopY, m, b), brickTopY];
-    var collisionIntersect2 = [brickLeftX, solveForY(m, brickLeftX, b)];
-    var collisionIntersect3 = [solveForX(brickBottomY, m, b), brickBottomY];
-    var collisionIntersect4 = [brickRightX, solveForY(m, brickRightX, b)];
+    var collisionIntersect1 = [solveForX(brickTopY, m, b, brickRightX, brickLeftX), brickTopY];
+    var collisionIntersect2 = [brickLeftX, solveForY(m, brickLeftX, b, brickBottomY, brickTopY)];
+    var collisionIntersect3 = [solveForX(brickBottomY, m, b, brickRightX, brickLeftX), brickBottomY];
+    var collisionIntersect4 = [brickRightX, solveForY(m, brickRightX, b, brickBottomY, brickTopY)];
 
     return [collisionIntersect1, collisionIntersect2, collisionIntersect3, collisionIntersect4];
 }
