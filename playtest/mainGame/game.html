@@ -36,9 +36,7 @@
         moveMultiplier = 75;
         
         lStopped = true;
-
-
-
+        
         maze = makeMaze(mazeSize, mazeSize, mazeComplexity, mazeDensity, removeStragglers);
         wallsO = mazePoints(maze);
 
@@ -88,7 +86,7 @@
                 maxY = Math.sin(playerAngle) * moveMultiplier * speed;
 
                 if (turn) {
-                    if (getDistanceBetween(playerDx, playerDy) >= getDistanceBetween(maxX, maxY)) {
+                    if (getHypotenuse(playerDx, playerDy) >= getHypotenuse(maxX, maxY)) {
                         playerPosition[0] += maxX;
                         playerPosition[1] += maxY;
                     } else {
@@ -100,7 +98,7 @@
 
 
                 } else {
-                    if (getDistanceBetween(playerDx, playerDy) >= getDistanceBetween(maxX, maxY)) {
+                    if (getHypotenuse(playerDx, playerDy) >= getHypotenuse(maxX, maxY)) {
                         player2Position[0] += maxX;
                         player2Position[1] += maxY;
                     } else {
@@ -133,8 +131,7 @@
             }
         }
 
-
-        function getDistanceBetween(x, y) {
+        function getHypotenuse(x, y) {
             return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
         }
 
@@ -143,18 +140,16 @@
             lineDx = (mousePosition.x - currentPlayerX);
             lineDy = (mousePosition.y - currentPlayerY);
             lineAngle = Math.atan2(lineDy, lineDx);
-
         }
 
         function lineStopped() {
-            //console.log('hello')
             lStopped = false;
         }
 
         function lineStarted() {
-            //console.log('bye')
             lStopped = true;
         }
+
         game(canvas, ctx, wallsO)
     </script>
 
