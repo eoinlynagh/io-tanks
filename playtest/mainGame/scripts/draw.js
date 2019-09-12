@@ -37,11 +37,11 @@ function game(canvas, ctx, walls) {
         drawBricks();
         if (bullet) {
 
-            dx = Math.cos(angle) * speed;
-            dy = Math.sin(angle) * speed;
+            var dx = Math.cos(angle) * speed;
+            var dy = Math.sin(angle) * speed;
 
             if (collision()) {
-                collisionInfo = getBlockBulletIntersection(bulletCoordinates[0], bulletCoordinates[1], dx, dy, lastBounce);
+                var collisionInfo = getBlockBulletIntersection(bulletCoordinates[0], bulletCoordinates[1], dx, dy, lastBounce);
                 bulletCoordinates = collisionInfo[0];
                 getBounce(collisionInfo[1]);
             } else {
@@ -60,8 +60,8 @@ function game(canvas, ctx, walls) {
 
         //checks if the bullet is colliding with any objects
         function collision() {
-            collisionX = bulletCoordinates[0] + dx;
-            collisionY = bulletCoordinates[1] + dy;
+            var collisionX = bulletCoordinates[0] + dx;
+            var collisionY = bulletCoordinates[1] + dy;
 
             if (collisionY <= 0 || collisionY >= canvasHeight || collisionX <= 0 || collisionX >= canvasWidth) {
                 if (collisionY <= 0 || collisionY > canvasHeight) {
@@ -238,8 +238,8 @@ function game(canvas, ctx, walls) {
         //draws all the bricks on screen
         function drawBricks() {
             for (var i = 0; i < walls.length; i++) {
-                brickX = walls[i][0];
-                brickY = walls[i][1];
+                var brickX = walls[i][0];
+                var brickY = walls[i][1];
 
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickSize, brickSize);

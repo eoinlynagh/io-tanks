@@ -12,7 +12,7 @@ function solveForY(m, knownX, b) {
 function getDistance(distX, distY, coordinate) {
     return Math.sqrt(Math.pow(Math.abs(distX - coordinate[0]), 2) + Math.pow(Math.abs(distY - coordinate[1]), 2));
 }
-//gets the lenght of the diagonal between 2 sides of length a & b
+//gets the length of the diagonal between 2 sides of length a & b
 function getHypotenuse(a, b) {
     return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 }
