@@ -136,6 +136,7 @@ function borderedMaze(shape) {
         arr[width] = 1;
         array2D[i] = arr;
     }
+    //might be better to fill every other one
     array2D[0].fill(1);
     array2D[height - 1].fill(1);
     return array2D;
