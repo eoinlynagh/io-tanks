@@ -24,7 +24,7 @@ function getBlockBulletIntersection(startX, startY, intersectDx, intersectDy, br
     var closest
     for (i = 0; i < potentialColl.length; i++) {
         var cmp = getDistance(startX, startY, potentialColl[i]);
-        if (cmp < minDistance && checkCenter(startX, startY, endX, endY, potentialColl[i])) {
+        if (cmp < minDistance && checkCentered(startX, startY, endX, endY, potentialColl[i])) {
             minDistance = cmp;
             closest = potentialColl[i];
             indexClosest = i;
@@ -34,7 +34,8 @@ function getBlockBulletIntersection(startX, startY, intersectDx, intersectDy, br
     return [closest, indexClosest]
 }
 
-function checkCenter(startX, startY, endX, endY, collision) {
+//checks that the point of intersection is between the start and end points
+function checkCentered(startX, startY, endX, endY, collision) {
     var condition1 = false;
     var condition2 = false;
     if (startX < endX) {
