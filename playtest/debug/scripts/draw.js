@@ -5,7 +5,7 @@ function game(canvas, ctx, walls) {
     var canvasHeight = canvas.height;
     
     //wall options
-    brickSize = canvas.width / mazeSize * 2;
+    brickSize = Math.round(canvas.width / mazeSize * 2);
     walls.forEach(wall => { //this function moves the bricks over slightly to make them looks better on the canvas
         wall[0] *= Math.round(brickSize / 2);
         wall[1] *= Math.round(brickSize / 2);
@@ -74,17 +74,17 @@ function game(canvas, ctx, walls) {
                 }
             }
 
-            if (getDistance(collisionX - dx, collisionY - dy, playerPosition) < playerRadius + bulletRadius && !alreadyHit && bounceCount > 0) {
-                alreadyHit = true;
-                alert("player 1 killed");
-                location.reload();
-                return true
-            } else if (getDistance(collisionX - dx, collisionY - dy, player2Position) < playerRadius + bulletRadius && !alreadyHit && bounceCount > 0) {
-                alreadyHit = true;
-                alert("player 2 killed");
-                location.reload();
-                return true
-            }
+            // if (getDistance(collisionX - dx, collisionY - dy, playerPosition) < playerRadius + bulletRadius && !alreadyHit && bounceCount > 0) {
+            //     alreadyHit = true;
+            //     alert("player 1 killed");
+            //     location.reload();
+            //     return true
+            // } else if (getDistance(collisionX - dx, collisionY - dy, player2Position) < playerRadius + bulletRadius && !alreadyHit && bounceCount > 0) {
+            //     alreadyHit = true;
+            //     alert("player 2 killed");
+            //     location.reload();
+            //     return true
+            // }
 
             return bulletCollisions(collisionX, collisionY, walls);
         }

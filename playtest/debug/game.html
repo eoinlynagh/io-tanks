@@ -54,6 +54,8 @@
                 dx = (mousePosition.x - bulletCoordinates[0]);
                 dy = (mousePosition.y - bulletCoordinates[1]);
                 angle = Math.atan2(dy, dx);
+                console.log("player position: " + currentPlayerX, currentPlayerY)
+                console.log("angle: " + angle)
                 bullet = true;
             }
         }
@@ -133,6 +135,15 @@
 
         function lineStarted() {
             lStopped = true;
+        }
+
+        //breaks
+        function test1(){
+            playerPosition = [1500.5,120.4];
+            currentPlayerX = playerPosition[0];
+            currentPlayerY = playerPosition[1];
+            angle = -0.3079150007773666;
+            bullet = true;
         }
 
         game(canvas, ctx, wallsO)
