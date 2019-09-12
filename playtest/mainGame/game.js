@@ -363,6 +363,7 @@ function game(canvas, ctx, walls) {
 
         //updates proper variables on bounce
         function bounce() {
+            lastBounce = [-10,-10]
             bounceCount++;
             if (bounceCount > maxBounceCount) {
                 bullet = false;
