@@ -27,7 +27,7 @@
     <canvas onmouseup="lineStarted()" onmousedown="lineStopped()" onmousemove="line()" oncontextmenu="move()"
         onclick="shoot()" style="background:black" id="myCanvas" width="3001" height="3001"></canvas>
     <script>
-        coordinates = $('#coordinates')
+        bulletCoordinates = $('#bulletCoordinates')
         mazeSize = 100;
         mazeComplexity = 1;
         mazeDensity = 0.3;
@@ -60,12 +60,12 @@
 
         function shoot() {
             if (turns > 0 && bullet == false && count < maxCount) {
-                x = currentPlayerX;
-                y = currentPlayerY;
+                bulletCoordinates[0] = currentPlayerX;
+                bulletCoordinates[1] = currentPlayerY;
                 switchTurns();
                 mousePosition = getMousePos(canvas, event);
-                dx = (mousePosition.x - x);
-                dy = (mousePosition.y - y);
+                dx = (mousePosition.x - bulletCoordinates[0]);
+                dy = (mousePosition.y - bulletCoordinates[1]);
                 angle = Math.atan2(dy, dx);
                 bullet = true;
             }
@@ -111,8 +111,8 @@
                     currentPlayerY = player2Position[1];
                 }
 
-                x = currentPlayerX;
-                y = currentPlayerY;
+                bulletCoordinates[0] = currentPlayerX;
+                bulletCoordinates[1] = currentPlayerY;
                 if (count == maxCount) {
                     switchTurns();
                     return;
@@ -158,8 +158,8 @@
 
         function setSituation(){
             bullet = false;
-            x = 1052.7427771799842;
-            y = 1696.538134021135;
+            bulletCoordinates[0] = 1052.7427771799842;
+            bulletCoordinates[1] = 1696.538134021135;
             playerPosition[0] = 1052.7427771799842;
             playerPosition[1] = 1696.538134021135;
             angle = -0.6338055832294172;
@@ -168,8 +168,8 @@
 
         function setSituation2() {
             bullet = false;
-            x = 1195.699999988079;
-            y = 2191.6000061035156;
+            bulletCoordinates[0] = 1195.699999988079;
+            bulletCoordinates[1] = 2191.6000061035156;
             playerPosition[0] = 1052.7427771799842;
             playerPosition[1] = 1696.538134021135;
             angle = -1.0456090635818591;
