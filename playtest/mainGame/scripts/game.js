@@ -58,6 +58,37 @@ function game(canvas, ctx, walls) {
             drawLine();
         }
 
+        //checks if the bullet is colliding with any objects
+        function collision() {
+            collisionX = bulletCoordinates[0] + dx;
+            collisionY = bulletCoordinates[1] + dy;
+
+            if (collisionY <= 0 || collisionY >= canvasHeight || collisionX <= 0 || collisionX >= canvasWidth) {
+                if (collisionY <= 0 || collisionY > canvasHeight) {
+                    horizontalCollision();
+                    return true
+
+                } else {
+                    verticalCollision();
+                    return true
+                }
+            }
+
+            if (getDistance(collisionX - dx, collisionY - dy, playerPosition) < playerRadius + bulletRadius && !alreadyHit && bounceCount > 0) {
+                alreadyHit = true;
+                alert("player 1 killed");
+                location.reload();
+                return true
+            } else if (getDistance(collisionX - dx, collisionY - dy, player2Position) < playerRadius + bulletRadius && !alreadyHit && bounceCount > 0) {
+                alreadyHit = true;
+                alert("player 2 killed");
+                location.reload();
+                return true
+            }
+
+            return bulletCollisions(collisionX, collisionY, walls);
+        }
+
         //sets the angle and bounce information corresponding which side is bounced off of 
         function getBounce(sideNumber) {
             //*****0
@@ -218,38 +249,7 @@ function game(canvas, ctx, walls) {
 
 
             }
-        }
-
-        //checks if the bullet is colliding with any objects
-        function collision() {
-            collisionX = bulletCoordinates[0] + dx;
-            collisionY = bulletCoordinates[1] + dy;
-
-            if (collisionY <= 0 || collisionY >= canvasHeight || collisionX <= 0 || collisionX >= canvasWidth) {
-                if (collisionY <= 0 || collisionY > canvasHeight) {
-                    horizontalCollision();
-                    return true
-
-                } else {
-                    verticalCollision();
-                    return true
-                }
-            }
-
-            if (getDistance(collisionX - dx, collisionY - dy, playerPosition) < playerRadius + bulletRadius && !alreadyHit && bounceCount > 0) {
-                alreadyHit = true;
-                alert("player 1 killed");
-                location.reload();
-                return true
-            } else if (getDistance(collisionX - dx, collisionY - dy, player2Position) < playerRadius + bulletRadius && !alreadyHit && bounceCount > 0) {
-                alreadyHit = true;
-                alert("player 2 killed");
-                location.reload();
-                return true
-            }
-
-            return bulletCollisions(collisionX, collisionY, walls);
-        }
+        }        
     }
 
     setInterval(draw, interval)
