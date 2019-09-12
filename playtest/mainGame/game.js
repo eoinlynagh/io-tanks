@@ -1,46 +1,47 @@
 function game(canvas, ctx, walls) {
 
-    //wallSize = canvas.width / mazeSize;
 
-    //game settings
+    //game settings --> probably should be moved to thier own file
     interval = 10
+    maxBounceCount = 4;
+    //constants
     canvasWidth = canvas.width;
     canvasHeight = canvas.height;
-    oldTurn = 666;
-    maxBounceCount = 4;
-    lastFrame = 10;
     alreadyHit = false;
-
+    
     //brick options
-    brickSize = canvas.width / mazeSize * 2;
     brickColour = "lightblue";
-    walls.forEach(wall => {
+    shiftDownModifier = 1.5;
+    //brick constants
+    brickSize = canvas.width / mazeSize * 2;
+    walls.forEach(wall => { //this function moves the bricks over slightly to make them looks better on the canvas
         wall[0] *= Math.round(brickSize / 2);
         wall[1] *= Math.round(brickSize / 2);
-
+        
         wall[0] -= Math.round(brickSize / 2);
-        wall[1] -= 1.5 * Math.round(brickSize / 2);
-
+        wall[1] -= shiftDownModifier * Math.round(brickSize / 2);        
     });
 
     //players options
+    //player1
     playerRadius = brickSize;
+    
     playerColor = "#0095DD";
-    player2Color = "#0095DD";
+    player2Color = "red";
+
     playerPosition = [canvas.width / 2, canvas.height - brickSize * 2]
+    player2Position = [canvas.width / 2, brickSize * 2]
+    //constants
     currentPlayerX = playerPosition[0];
     currentPlayerY = playerPosition[1];
 
-    //players options
-    player2Radius = brickSize;
-    player2Color = "red";
-    player2Position = [canvas.width / 2, brickSize * 2]
 
     //bullet options
     bulletRadius = brickSize / 4
     bulletColor = "#0095DD"
     bullet2Color = "red"
     speed = brickSize / 10 + mazeSize / 300;
+    //constants
     bulletCoordinates = [playerPosition[0], playerPosition[1]]
     angle = 666;
     bullet = false;
@@ -48,8 +49,7 @@ function game(canvas, ctx, walls) {
     lastBounce = -666;
 
     //line options
-    lineSpeed = speed;
-    lineAngle = angle;
+    lineSpeed = speed;lineAngle = angle; //these will evantually be disabled
     lineColour = "white"
     disableLineBounce = true;
 
@@ -79,10 +79,10 @@ function game(canvas, ctx, walls) {
             if (lineCollisions(lineX, lineY)) {
                 if (disableLineBounce) {
                     //check all possible intersections of this line with all lines comprising of all blocks and choose the closest one
-                        //get the equation of the line
-                        //find the next intersection of that line with a block
-                        //draw a line from there to the block
-                        //get the equation of the new line, repeat until it has bounced the same number of time as the ball can
+                    //get the equation of the line
+                    //find the next intersection of that line with a block
+                    //draw a line from there to the block
+                    //get the equation of the new line, repeat until it has bounced the same number of time as the ball can
                     break;
                 }
             }
@@ -363,7 +363,7 @@ function game(canvas, ctx, walls) {
 
         //updates proper variables on bounce
         function bounce() {
-            lastBounce = [-10,-10]
+            lastBounce = [-10, -10]
             bounceCount++;
             if (bounceCount > maxBounceCount) {
                 bullet = false;
