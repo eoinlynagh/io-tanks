@@ -102,7 +102,7 @@ function getIntersections(brick, m, b) {
 
 //returns true if the x and y coordinates are contained within the block
 function brickCollision(bulletX, bulletY, brick) {
-    var modifier = 0; //how far out the block collision extends
+    var modifier = brickSize/20; //how far out the block collision extends
     var checkX = (bulletX >= brick[0] - modifier && bulletX <= brick[0] + brickSize + modifier);
     var checkY = (bulletY >= brick[1] - modifier && bulletY <= brick[1] + brickSize + modifier)
     return (checkX && checkY);
