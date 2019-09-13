@@ -132,11 +132,17 @@ function borderedMaze(shape) {
     for (i = 0; i < height; i++) {
         (arr = []).length = width;
         arr.fill(0)
-        arr[0] = 1;
-        arr[width] = 1;
+        if (i % 2 == 0) {
+            arr[0] = 1;
+            arr[width] = 1;
+        }
         array2D[i] = arr;
     }
-    array2D[0].fill(1);
-    array2D[height - 1].fill(1);
+    //might be better to fill every other one
+    for(i = 0; i < array2D[0].length; i++) {
+        array2D[0][i] = 1;
+        array2D[height - 1][i] = 1;
+        i++;
+    }
     return array2D;
 }
