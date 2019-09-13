@@ -5,6 +5,11 @@ function solveForX(knownY, m, b, upper, lower) {
     return -6666;
 }
 
+function areEqual(a,b,tolerance){
+    var condition = (Math.abs(a - b) <= tolerance)
+    return condition;
+}
+
 //gets the point on a line when you know the X value
 function solveForY(m, knownX, b, upper, lower) {
     var y = m * knownX + b

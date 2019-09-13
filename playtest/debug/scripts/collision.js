@@ -1,37 +1,87 @@
 //should brickSize be global?
+//returns true if there is at least one collision point between the start and the end
+function checkCollision(startX, startY, dx, dy, walls) {
+    var flag = false
+    var endX = startX + dx;
+    var endY = startY + dy;
+    var m = dy / dx;
+    var b = endY - (m * endX)
+
+    for (let wall of walls) {
+        var potentialColl = getIntersections(wall, m, b);
+        if (!flag) {
+            for (let collision of potentialColl) {
+                if (checkCenter(startX, startY, endX, endY, collision)) {
+                    if (areEqual(collision[0], lastCollision[0], tolerance) && areEqual(collision[1], lastCollision[1], tolerance)) {
+                        break;
+                    } else {
+                        flag = true;
+                        break;
+                    }
+                }
+            };
+        }
+        if (flag) {
+            break;
+        }
+    };
+    return flag;
+}
+
+function getCollisions(startX, startY, dx, dy, walls) {
+    var allCollisions = [];
+    var endX = startX + dx;
+    var endY = startY + dy;
+    var m = dy / dx;
+    var b = endY - (m * endX)
+
+    for (let wall of walls) {
+        var potentialColl = getIntersections(wall, m, b);
+        var side = 0;
+        for (let collision of potentialColl) {
+            if (checkCenter(startX, startY, endX, endY, collision)) {
+                if (areEqual(collision[0], lastCollision[0], tolerance) && areEqual(collision[1], lastCollision[1], tolerance)) {
+                    break;
+                } else {
+                    allCollisions.push([collision,side,wall]);
+                }
+
+            };
+            side++;
+        }
+
+    };
+
+    return allCollisions;
+}
 
 //if there is a collision, this moves the block to the point of intersection between the bullets path and the block, then changes the angle to reflect the collision
-function getBlockBulletIntersection(startX, startY, intersectDx, intersectDy, brick) {
+function getBlockBulletIntersection(startX, startY, intersectDx, intersectDy, walls) {
     //*****0
     //**1|---|
     //***|---|3
     //*****2
-    var endX = startX + intersectDx;
-    var endY = startY + intersectDy;
-    //because collision returns true on player hit, this sanity check is needed for intended behvaiour
-    if (!brickCollision(endX, endY, brick)) {
-        return [endX, endY]
-    }
-    //slope and intersect
-    var m = intersectDy / intersectDx;
-    var b = endY - (m * endX)
-
-    //finds where the bullet path collides with the sqaure
-    var potentialColl = getIntersections(brick, m, b);
+    var potentialColl = getCollisions(startX, startY, intersectDx, intersectDy, walls)
 
     var minDistance = 90000000;
-    var indexClosest;
-    var closest
+    var closest;
+    var side;
+    var brick;
     for (i = 0; i < potentialColl.length; i++) {
-        var cmp = getDistance(startX, startY, potentialColl[i]);
+        var cmp = getDistance(startX, startY, potentialColl[i][0]);
         if (cmp < minDistance) {
             minDistance = cmp;
-            closest = potentialColl[i];
-            indexClosest = i;
+            closest = potentialColl[i][0];
+            side = potentialColl[i][1];
+            brick = potentialColl[i][2];
         }
     }
     //index is the side that is bouncing off of, so with that we can change the angle
-    return [closest, indexClosest]
+    var endX = startX + intersectDx;
+    var endY = startY + intersectDy;
+    var m = intersectDy / intersectDx
+    var b = endY - (m * endX)
+    return [closest, side]
 }
 
 //gets the intersections of a block with a line (defined as slope and intersect)
@@ -84,4 +134,22 @@ function lineCollisions(collX, collY, walls) {
         }
     }
     return false;
+}
+
+function checkCenter(startX, startY, endX, endY, collision) {
+    var condition1 = false;
+    var condition2 = false;
+    if (startX < endX) {
+        condition1 = (startX <= collision[0] && endX >= collision[0])
+    } else {
+        condition1 = (endX <= collision[0] && startX >= collision[0])
+    }
+
+    if (startY < endY) {
+        condition2 = (startY <= collision[1] && endY >= collision[1])
+    } else {
+        condition2 = (startY >= collision[1] && endY <= collision[1])
+    }
+
+    return condition1 && condition2
 }

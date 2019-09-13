@@ -36,3 +36,4 @@ turns = 2;
 count = 0;
 turn = true;
 lStopped = true;
+lastCollision = [-666, -666];
