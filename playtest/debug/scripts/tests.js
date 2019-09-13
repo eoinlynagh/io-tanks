@@ -1,3 +1,4 @@
+//tests are designed to work on a size 3001 x 3001 canvas
 //fixed by making it choose a point in between the start and finish
 function test1(){
     playerPosition = [1500.5,120.4];
