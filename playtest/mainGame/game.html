@@ -6,6 +6,7 @@
     <script type="text/javascript" src="scripts/collision.js"></script>
     <script type="text/javascript" src="scripts/math.js"></script>
     <script type="text/javascript" src="scripts/draw.js"></script>
+    <script type="text/javascript" src="scripts/tests.js"></script>
     <script type="text/javascript" src="../../maze generation algorithms/scripts/maze.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -31,10 +32,11 @@
     <script>
 
         maze = makeMaze(mazeSize, mazeSize, mazeComplexity, mazeDensity, removeStragglers);
-        wallsO = mazePoints(maze);
+        wallsO = mazePoints(maze).concat([[mazeSize/2, mazeSize/2],[mazeSize/2 - 2, mazeSize/2 - 2],[mazeSize/2+2, mazeSize/2+2],[mazeSize/2, mazeSize/2+2]]);
 
         canvas = document.getElementById('myCanvas');
         ctx = canvas.getContext('2d');
+        
 
         function getMousePos(canvas, evt) {
             var rect = canvas.getBoundingClientRect();
