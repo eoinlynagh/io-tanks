@@ -24,7 +24,7 @@ function getBlockBulletIntersection(startX, startY, intersectDx, intersectDy, br
     var closest
     for (i = 0; i < potentialColl.length; i++) {
         var cmp = getDistance(startX, startY, potentialColl[i]);
-        if (cmp < minDistance && checkCenter(startX, startY, endX, endY, potentialColl[i])) {
+        if (cmp < minDistance) {
             minDistance = cmp;
             closest = potentialColl[i];
             indexClosest = i;
@@ -32,24 +32,6 @@ function getBlockBulletIntersection(startX, startY, intersectDx, intersectDy, br
     }
     //index is the side that is bouncing off of, so with that we can change the angle
     return [closest, indexClosest]
-}
-
-function checkCenter(startX, startY, endX, endY, collision) {
-    var condition1 = false;
-    var condition2 = false;
-    if (startX < endX) {
-        condition1 = (startX <= collision[0] && endX >= collision[0])
-    } else {
-        condition1 = (endX <= collision[0] && startX >= collision[0])
-    }
-
-    if (startY < endY) {
-        condition2 = (startY <= collision[1] && endY >= collision[1])
-    } else {
-        condition2 = (startY >= collision[1] && endY <= collision[1])
-    }
-
-    return condition1 && condition2
 }
 
 //gets the intersections of a block with a line (defined as slope and intersect)

@@ -32,7 +32,7 @@
     <script>
 
         maze = makeMaze(mazeSize, mazeSize, mazeComplexity, mazeDensity, removeStragglers);
-        wallsO = mazePoints(maze).concat([[mazeSize/2, mazeSize/2],[mazeSize/2 - 2, mazeSize/2 - 2],[mazeSize/2+2, mazeSize/2+2]]);
+        wallsO = mazePoints(maze).concat([[mazeSize/2, mazeSize/2],[mazeSize/2 - 2, mazeSize/2 - 2],[mazeSize/2+2, mazeSize/2+2],[mazeSize/2, mazeSize/2+2]]);
 
         canvas = document.getElementById('myCanvas');
         ctx = canvas.getContext('2d');
