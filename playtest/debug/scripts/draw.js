@@ -115,18 +115,22 @@ function game(canvas, ctx, walls) {
         //draws a line that shows the path of the bullet (currently, the line does not bounce)
         function drawLine() {
             //this can be changed to remove speed iteration, and just iterate through all blocks and find the closest intersection
-            var x = currentPlayerY;
-            var y = currentPlayerY;
-            var dx = Math.cos(lineAngle);
-            var dy = Math.sin(lineAngle);
-
-            if (checkCollision(x,y,dx,dy,walls)) {
-                var collisionInfo = getBlockBulletIntersection(x, y, dx, dy, walls);
-                lineCoordinates = collisionInfo[0];
-                lineX = lineCoordinates[0];
-                lineY = lineCoordinates[1];
+            for (i = 0; i < mazeSize * 10; i++) {
+                lineX = prevX + (Math.cos(lineAngle) * lineSpeed)
+                lineY = prevY + (Math.sin(lineAngle) * lineSpeed)
+                prevX = lineX;
+                prevY = lineY;
+                if (lineCollisions(lineX, lineY, walls)) {
+                    if (disableLineBounce) {
+                        //check all possible intersections of this line with all lines comprising of all blocks and choose the closest one
+                        //get the equation of the line
+                        //find the next intersection of that line with a block
+                        //draw a line from there to the block
+                        //get the equation of the new line, repeat until it has bounced the same number of time as the ball can
+                        break;
+                    }
+                }
             }
-
             ctx.beginPath();
             ctx.moveTo(currentPlayerX, currentPlayerY);
             ctx.lineTo(lineX, lineY);
