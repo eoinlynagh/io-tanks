@@ -26,3 +26,26 @@ code editor
 
 NPM 
     - i've never used it before, so I will have to look into it
+    - package manager used alongside Node.js, will be useful for any utilities we want to implement but ultimately probably not used much
+        - Not pushing any node modules
+    - `npm init` used to create a base node.js application, creating a package.json as well
+        - also going to be used for react I believe
+        - express and socket.io also used in this for connections
+            - Not sure if socket.io is best, I think there were better out there
+        - SOCKET.IO: https://socket.io/
+            - Quick bridge between client and server
+        - REACT JS: https://reactjs.org/
+            - Frontend tool for live updating, quick refreshes
+        - EXPRESS: https://expressjs.com/
+            - Helps with coding a html app
+
+Node.js
+    - Base of online js framework, uses NPM
+    - When installed, need to fix up gitignore to remove any packages and our package locks
+    - TO INITALIZE:
+        > npm init (makes packages and basic node manuals)
+        > update package with our own data (if not done in init)
+        > npm install (express, react, socket.io) --save (one at a time)
+        > start putting backend in server section and frontend in client section
+    - Use https://github.com/loparcog/multiplayer-js as reference
+        - Do not need to push node_modules, can be rebuilt from package I believe
