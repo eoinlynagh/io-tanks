@@ -35,3 +35,12 @@ function test4(){
     angle = -0.28204776739050663;
     bullet = true;
 }
+
+function test5(){
+    playerPosition = [1500.5 , 120];
+    currentPlayerX = playerPosition[0];
+    currentPlayerY = playerPosition[1];
+    bulletCoordinates = [1500.5 , 120];
+    angle = -0.15347954821282017
+    bullet = true;
+}
