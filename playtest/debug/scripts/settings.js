@@ -6,8 +6,6 @@ removeStragglers = true;
 
 //game settings
 interval = 10
-maxBounceCount = 4;
-
 
 //brick options
 brickColour = "lightblue";
@@ -22,6 +20,7 @@ moveMultiplier = 75; //size of the circle that the player moves in
 //bullet options
 bulletColor = "#0095DD"
 bullet2Color = "red"
+maxBounceCount = 5;
 
 //line options
 lineColour = "white"
@@ -37,3 +36,4 @@ turns = 2;
 count = 0;
 turn = true;
 lStopped = true;
+lastCollision = [-666, -666];
