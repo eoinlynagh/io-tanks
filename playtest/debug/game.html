@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <script type="text/javascript" src="scripts/settings.js"></script>
     <script type="text/javascript" src="scripts/collision.js"></script>
     <script type="text/javascript" src="scripts/math.js"></script>
+    <script type="text/javascript" src="scripts/debug.js"></script>
     <script type="text/javascript" src="scripts/draw.js"></script>
-    <script type="text/javascript" src="scripts/tests.js"></script>
     <script type="text/javascript" src="../../maze generation algorithms/scripts/maze.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -28,15 +29,26 @@
 <body>
     </br>
     <canvas onmouseup="lineStarted()" onmousedown="lineStopped()" onmousemove="line()" oncontextmenu="move()"
-        onclick="shoot()" style="background:black" id="myCanvas" width="3001" height="3001"></canvas>
+        onclick="shoot()" style="background:black" id="myCanvas" width="2001" height="2001"></canvas>
     <script>
-
+        if (DEBUG) {
+            maze = makeMaze(mazeSize, mazeSize, mazeComplexity, mazeDensity, removeStragglers);
+            wallsO = mazePoints(maze).concat([
+                [mazeSize / 2, mazeSize / 2],
+                [mazeSize / 2 - 2, mazeSize / 2 - 2],
+                [mazeSize / 2 + 2, mazeSize / 2 + 2],
+                [mazeSize / 2, mazeSize / 2 + 2]
+            ]);
+        }else{
         maze = makeMaze(mazeSize, mazeSize, mazeComplexity, mazeDensity, removeStragglers);
-        wallsO = mazePoints(maze).concat([[mazeSize/2, mazeSize/2],[mazeSize/2 - 2, mazeSize/2 - 2],[mazeSize/2+2, mazeSize/2+2],[mazeSize/2, mazeSize/2+2]]);
+        wallsO = mazePoints(maze);
+        }
+
+        turn = true; //if it is the first players turn
 
         canvas = document.getElementById('myCanvas');
         ctx = canvas.getContext('2d');
-        
+
 
         function getMousePos(canvas, evt) {
             var rect = canvas.getBoundingClientRect();
@@ -48,16 +60,15 @@
         }
 
         function shoot() {
+            frames = 0;
             if (turns > 0 && bullet == false && count < maxCount) {
                 bulletCoordinates[0] = currentPlayerX;
                 bulletCoordinates[1] = currentPlayerY;
-                console.log("player position: " + currentPlayerX, currentPlayerY)
                 switchTurns();
                 mousePosition = getMousePos(canvas, event);
                 dx = (mousePosition.x - bulletCoordinates[0]);
                 dy = (mousePosition.y - bulletCoordinates[1]);
                 angle = Math.atan2(dy, dx);
-                console.log("angle: " + angle)
                 bullet = true;
             }
         }
@@ -75,8 +86,8 @@
                 playerDy = (playerMousePosition.y - currentPlayerY);
                 playerAngle = Math.atan2(playerDy, playerDx);
 
-                maxX = Math.cos(playerAngle) * moveMultiplier * speed;
-                maxY = Math.sin(playerAngle) * moveMultiplier * speed;
+                maxX = Math.cos(playerAngle) * moveMultiplier * speedMultiplier * speed;
+                maxY = Math.sin(playerAngle) * moveMultiplier * speedMultiplier * speed;
 
                 if (turn) {
                     if (getHypotenuse(playerDx, playerDy) >= getHypotenuse(maxX, maxY)) {
