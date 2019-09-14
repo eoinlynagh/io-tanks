@@ -1,3 +1,12 @@
+function log(msg){
+    if(!DEBUG){return;}
+    console.log(msg);
+}
+
+function debug(){
+    if(DEBUG){debugger;}
+}
+
 //tests are designed to work on a size 3001 x 3001 canvas
 //fixed by making it choose a point in between the start and finish
 function test1(){
@@ -9,6 +18,7 @@ function test1(){
 }
 //fixed by making changed intersections to discard points that are not within the bounds of the brick
 function test2() {
+    if(!DEBUG){return;}
     playerPosition = [938.5, 1944];
     currentPlayerX = playerPosition[0];
     currentPlayerY = playerPosition[1];
@@ -19,6 +29,7 @@ function test2() {
 
 //fixed by removing overlapping blocks from the borders
 function test3(){
+    if(!DEBUG){return;}
     playerPosition = [1500.5, 2881];
     currentPlayerX = playerPosition[0];
     currentPlayerY = playerPosition[1];
@@ -29,6 +40,7 @@ function test3(){
 
 //I think to fix this one, we have to make it so that the line checks for collision, not the position of the end point
 function test4(){
+    if(!DEBUG){return;}
     playerPosition = [1396, 1612.77783203125];
     currentPlayerX = playerPosition[0];
     currentPlayerY = playerPosition[1];
@@ -37,7 +49,9 @@ function test4(){
     bullet = true;
 }
 
+//fixed by totally changing collision lol
 function test5(){
+    if(!DEBUG){return;}
     playerPosition = [1500.5 , 120];
     currentPlayerX = playerPosition[0];
     currentPlayerY = playerPosition[1];

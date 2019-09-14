@@ -1,5 +1,6 @@
 function game(canvas, ctx, walls) {
 
+    //calculated options, related to canvas size
     //wall options
     brickSize = Math.round(canvas.width / mazeSize * 2);
     walls.forEach(wall => { //this function moves the bricks over slightly to make them looks better on the canvas
@@ -9,54 +10,59 @@ function game(canvas, ctx, walls) {
         wall[0] -= Math.round(brickSize / 2);
         wall[1] -= shiftDownModifier * Math.round(brickSize / 2);
     });
-    
+
     //player options
     playerRadius = brickSize;
     playerPosition = [canvas.width / 2, canvas.height - brickSize * 2]
     player2Position = [canvas.width / 2, brickSize * 2]
     currentPlayerX = playerPosition[0];
     currentPlayerY = playerPosition[1];
-    
+
     //bullet options
     bulletRadius = brickSize / 4
     speed = 2 * brickSize / 10 + mazeSize / 300;
     bulletCoordinates = [playerPosition[0], playerPosition[1]]
 
-    //line options
     lineSpeed = speed; //these will be disabled
-    lineAngle = angle; //these will be disabled
-    //TOLERANCE for collisions
-    tolerance = 0.00000001;
     //this is the main function of the game, draws and clears and calls other functions every frame
     function draw() {
+        frames++
+        log(frames);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawBall();
+        drawPlayer();
         drawBricks();
         if (bullet) {
+            checkKill() //checks if player is hit
+            drawBullet();
+
+            //gets bullet position, and next one
             var x = bulletCoordinates[0];
             var y = bulletCoordinates[1];
-            var dx = Math.cos(angle) * speed;
-            var dy = Math.sin(angle) * speed;
+            var dx = Math.cos(angle) * speedMultiplier * speed;
+            var dy = Math.sin(angle) * speedMultiplier * speed;
 
-            if (checkCollision(x,y,dx,dy,walls)) {
-                var collisionInfo = getBlockBulletIntersection(x, y, dx, dy, walls);
-                bulletCoordinates = collisionInfo[0];
-                lastCollision[0] = bulletCoordinates[0];
+            if (checkCollision(x, y, dx, dy, walls)) { //if that bullet could intersect with any bricks
+                /*
+                 * should we change this to make it account for speed, and not stop on the frame it hits?
+                 */
+                var collisionInfo = getBlockBulletIntersection(x, y, dx, dy, walls); //finds the intersection
+                bulletCoordinates = collisionInfo[0]; //gets point of collision with block
+                lastCollision[0] = bulletCoordinates[0]; //last collision point, so it can't hit the same wall again
                 lastCollision[1] = bulletCoordinates[1];
-                getBounce(collisionInfo[1]);
+                getBounce(collisionInfo[1]); //changes angle depending on what side it hit
             } else {
-                bulletCoordinates[0] += dx;
+                bulletCoordinates[0] += dx; //moves the calculated distance
                 bulletCoordinates[1] += dy;
             }
 
-            drawBullet();
-
         }
-        if (turns > 0 && !lStopped && !bullet) {
+        if (turns > 0 && !lStopped && !bullet) { //first player can't shoot so no line
             prevX = currentPlayerX;
             prevY = currentPlayerY;
             drawLine();
         }
+
+        
 
         //sets the angle and bounce information corresponding which side is bounced off of 
         function getBounce(sideNumber) {
@@ -70,11 +76,11 @@ function game(canvas, ctx, walls) {
                 verticalCollision();
             }
         }
-        //bouncing of a horizontal side (side 1 or 3)
+
+        //bouncing off a horizontal side (side 1 or 3)
         function horizontalCollision() {
             bounce();
             angle = -angle;
-
         }
 
         //bouncing off of a vertical side (side 0 or 2)
@@ -140,7 +146,7 @@ function game(canvas, ctx, walls) {
         }
 
         //draws the players, and the surrounding lines that show where they can move
-        function drawBall() {
+        function drawPlayer() {
             ctx.beginPath();
             ctx.arc(playerPosition[0], playerPosition[1], playerRadius, 0, Math.PI * 2)
             ctx.fillStyle = playerColor;
@@ -150,14 +156,14 @@ function game(canvas, ctx, walls) {
             if (turn && !bullet && count < maxCount) {
                 //these can probably be changed to a loop
                 ctx.beginPath();
-                ctx.arc(playerPosition[0], playerPosition[1], speed * moveMultiplier, 0, Math.PI * 2)
+                ctx.arc(playerPosition[0], playerPosition[1], speed * moveMultiplier * speedMultiplier, 0, Math.PI * 2)
                 ctx.lineWidth = brickSize / 5;
                 ctx.strokeStyle = "green";
                 ctx.stroke();
                 ctx.closePath();
                 if (count + 1 < maxCount) {
                     ctx.beginPath();
-                    ctx.arc(playerPosition[0], playerPosition[1], speed * 2 * moveMultiplier, 0, Math.PI * 2)
+                    ctx.arc(playerPosition[0], playerPosition[1], speed * 2 * moveMultiplier * speedMultiplier, 0, Math.PI * 2)
                     ctx.lineWidth = brickSize / 5;
                     ctx.strokeStyle = "yellow";
                     ctx.stroke();
@@ -165,7 +171,7 @@ function game(canvas, ctx, walls) {
                 }
                 if (count + 2 < maxCount) {
                     ctx.beginPath();
-                    ctx.arc(playerPosition[0], playerPosition[1], speed * 3 * moveMultiplier, 0, Math.PI * 2)
+                    ctx.arc(playerPosition[0], playerPosition[1], speed * 3 * moveMultiplier * speedMultiplier, 0, Math.PI * 2)
                     ctx.lineWidth = brickSize / 5;
                     ctx.strokeStyle = "red";
                     ctx.stroke();
@@ -173,14 +179,14 @@ function game(canvas, ctx, walls) {
                 }
             } else if (!bullet && count < maxCount) {
                 ctx.beginPath();
-                ctx.arc(player2Position[0], player2Position[1], speed * moveMultiplier, 0, Math.PI * 2)
+                ctx.arc(player2Position[0], player2Position[1], speed * moveMultiplier * speedMultiplier, 0, Math.PI * 2)
                 ctx.lineWidth = brickSize / 5;
                 ctx.strokeStyle = "green";
                 ctx.stroke();
                 ctx.beginPath();
                 if (count + 1 < maxCount) {
                     ctx.beginPath();
-                    ctx.arc(player2Position[0], player2Position[1], speed * 2 * moveMultiplier, 0, Math.PI * 2)
+                    ctx.arc(player2Position[0], player2Position[1], speed * 2 * moveMultiplier * speedMultiplier, 0, Math.PI * 2)
                     ctx.lineWidth = brickSize / 5;
                     ctx.strokeStyle = "yellow";
                     ctx.stroke();
@@ -188,7 +194,7 @@ function game(canvas, ctx, walls) {
                 }
                 if (count + 2 < maxCount) {
                     ctx.beginPath();
-                    ctx.arc(player2Position[0], player2Position[1], speed * 3 * moveMultiplier, 0, Math.PI * 2)
+                    ctx.arc(player2Position[0], player2Position[1], speed * 3 * moveMultiplier * speedMultiplier, 0, Math.PI * 2)
                     ctx.lineWidth = brickSize / 5;
                     ctx.strokeStyle = "red";
                     ctx.stroke();
