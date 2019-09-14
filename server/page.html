@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+    <title> Tank Game Title Here </title>
+
+    <div id="signDiv">
+      Username: <input id="signDiv-username" type="text"></input><br>
+      <button id="signDiv-play">Play Now!</button>
+    </div>
+
+    <div id="gameDiv" style="display:none;">
+
+    <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;">
+    </canvas>
+
+    </div>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+
+      //SIGN IN OBJECTS
+      var signDiv = document.getElementById('signDiv');
+      var signDivUsername = document.getElementById('signDiv-username');
+      var signDivPlay = document.getElementById('signDiv-play');
+
+      // When play is pressed
+      signDivPlay.onclick = function(){
+        socket.emit('PlayNow',{username:signDivUsername.value});
+      }
+
+      // When server responds
+      socket.on('PlayResponse',function(data){
+        signDiv.style.display = 'none';
+        gameDiv.style.display = 'inline-block';
+      });
+
+      // When game is done or death occurs
+      socket.on('Complete', function(){
+        signDiv.style.display = 'inline-block';
+        gameDiv.style.display = 'none';
+      });
+
+    </script>
+  </body>
+</html>
