@@ -41,6 +41,34 @@
         gameDiv.style.display = 'none';
       });
 
+    // CANVAS OBJECTS
+    var canv=document.getElementById("ctx");
+    var ctx = document.getElementById("ctx").getContext("2d");
+    ctx.font = '15px Arial';
+
+    socket.on('newPositions', function(data){
+      ctx.clearRect(0,0,500,500);
+      console.log(data);
+      playerDraw(data);
+    });
+
+    function playerDraw(data){
+      ctx.fillStyle = "black";
+      for(var i = 0; i < data.player.length; i++){
+        ctx.fillRect(data.player[i].x, data.player[i].y, data.player[i].w, data.player[i].h);
+      }
+    }
+
+    window.requestAnimFrame = (function() {
+          return window.requestAnimationFrame ||
+              window.webkitRequestAnimationFrame ||
+              window.mozRequestAnimationFrame || function(callback) {
+              window.setTimeout(callback, 1000 / 60);
+          };
+      })();
+
+
+
     </script>
   </body>
 </html>

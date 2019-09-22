@@ -29,6 +29,7 @@ io.on('connection', function(socket){
 	    else{
 	      Player.onConnect(socket, 'Unknown');
 	    }
+	    socket.join('game');
 	    socket.emit('PlayResponse', {success: true});
   	});
 
@@ -74,11 +75,16 @@ var Player = function(id, user){
 	var self = Entity();
 	self.id = id
 	self.user = user
+	self.w = 100
+	self.h = 150
     self.pressingRight = false;
     self.pressingLeft = false;
     self.pressingUp = false;
     self.pressingDown = false;
     self.pressingAttack = false;
+
+    Player.list[id] = self;
+    return self
 }
 
 Player.list = {};
@@ -97,14 +103,29 @@ Player.onConnect = function(socket, username){
             player.pressingDown = data.state;
         else if(data.inputId == 'attack')
             player.pressingAttack = data.state;
-        else if(data.inputId == 'mouseAngle')
-            player.mouse = data.state
     });
 }
 
 Player.onDisconnect = function(socket){
   i = idFind(socket)
   delete Player.list[i];
+}
+
+Player.update = function(){
+	var pack = [];
+	for(var i in Player.list){
+		var p = Player.list[i];
+		p.update();
+		pack.push({
+			id: p.id,
+			user: p.user,
+			x: p.x,
+			y: p.y,
+			w: p.w,
+			h: p.h,
+		});
+	}
+	return pack
 }
 
 // FUNCTIONS
@@ -120,3 +141,13 @@ function idFind(socket){
     }
   }
 }
+
+
+setInterval(function(){
+  //optimize push for plat, only push once on game start
+    var pack = {
+      player: Player.update()
+    }
+    io.to('game').emit('newPositions', pack);
+
+},1000/1);
