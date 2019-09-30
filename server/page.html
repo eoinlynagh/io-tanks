@@ -17,55 +17,113 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      var socket = io();
+    var socket = io();
 
-      //SIGN IN OBJECTS
-      var signDiv = document.getElementById('signDiv');
-      var signDivUsername = document.getElementById('signDiv-username');
-      var signDivPlay = document.getElementById('signDiv-play');
+    //SIGN IN OBJECTS
+    var signDiv = document.getElementById('signDiv');
+    var signDivUsername = document.getElementById('signDiv-username');
+    var signDivPlay = document.getElementById('signDiv-play');
 
-      // When play is pressed
-      signDivPlay.onclick = function(){
-        socket.emit('PlayNow',{username:signDivUsername.value});
-      }
-
-      // When server responds
-      socket.on('PlayResponse',function(data){
-        signDiv.style.display = 'none';
-        gameDiv.style.display = 'inline-block';
-      });
-
-      // When game is done or death occurs
-      socket.on('Complete', function(){
-        signDiv.style.display = 'inline-block';
-        gameDiv.style.display = 'none';
-      });
-
-    // CANVAS OBJECTS
-    var canv=document.getElementById("ctx");
-    var ctx = document.getElementById("ctx").getContext("2d");
-    ctx.font = '15px Arial';
-
-    socket.on('newPositions', function(data){
-      ctx.clearRect(0,0,500,500);
-      console.log(data);
-      playerDraw(data);
-    });
-
-    function playerDraw(data){
-      ctx.fillStyle = "black";
-      for(var i = 0; i < data.player.length; i++){
-        ctx.fillRect(data.player[i].x, data.player[i].y, data.player[i].w, data.player[i].h);
-      }
+    // When play is pressed
+    signDivPlay.onclick = function(){
+      socket.emit('PlayNow',{username:signDivUsername.value});
     }
 
-    window.requestAnimFrame = (function() {
-          return window.requestAnimationFrame ||
-              window.webkitRequestAnimationFrame ||
-              window.mozRequestAnimationFrame || function(callback) {
-              window.setTimeout(callback, 1000 / 60);
-          };
-      })();
+    // When server responds
+    socket.on('PlayResponse',function(data){
+      signDiv.style.display = 'none';
+      gameDiv.style.display = 'inline-block';
+    });
+
+    // When game is done or death occurs
+    socket.on('Complete', function(){
+      signDiv.style.display = 'inline-block';
+      gameDiv.style.display = 'none';
+    });
+
+  // CANVAS OBJECTS
+  var canv=document.getElementById("ctx");
+  var ctx = document.getElementById("ctx").getContext("2d");
+  ctx.font = '15px Arial';
+
+  socket.on('newPositions', function(data){
+    ctx.clearRect(0,0,500,500);
+    console.log(data);
+    playerDraw(data);
+    weaponDraw(data);
+  });
+
+    // PLAYER INPUT
+  document.onkeydown = function(event){
+    if(event.keyCode === 68)    //d
+        socket.emit('keyPress',{inputId:'right',state:true});
+    else if(event.keyCode === 83)   //s
+        socket.emit('keyPress',{inputId:'down',state:true});
+    else if(event.keyCode === 65) //a
+        socket.emit('keyPress',{inputId:'left',state:true});
+    else if(event.keyCode === 87) // w
+        socket.emit('keyPress',{inputId:'up',state:true});
+  }
+
+  document.onkeyup = function(event){
+    if(event.keyCode === 68)    //d
+      socket.emit('keyPress',{inputId:'right',state:false});
+    else if(event.keyCode === 83)   //s
+      socket.emit('keyPress',{inputId:'down',state:false});
+    else if(event.keyCode === 65) //a
+      socket.emit('keyPress',{inputId:'left',state:false});
+    else if(event.keyCode === 87) // w
+      socket.emit('keyPress',{inputId:'up',state:false});
+  }
+  
+  document.onmousedown = function(event){
+    socket.emit('keyPress',{inputId:'attack',state:true});
+  }
+
+  document.onmouseup = function(event){
+    socket.emit('keyPress',{inputId:'attack',state:false});
+  }
+
+  document.onmousemove = function(event){
+    var rect = canv.getBoundingClientRect();
+    var x = event.clientX - rect.left;
+    var y = event.clientY - rect.top;
+    var angle = {x,y};
+    socket.emit('keyPress',{inputId:'mouseAngle',state:angle});
+  }
+
+  // DRAWING TOOLS
+  function playerDraw(data){
+    ctx.fillStyle = "black";
+    for(var i = 0; i < data.player.length; i++){
+      ctx.save();
+      ctx.beginPath();
+      ctx.translate(data.player[i].x + data.player[i].w/2, data.player[i].y);
+      ctx.rotate(data.player[i].angle);
+      ctx.fillRect(- data.player[i].w/2, 0, data.player[i].w, data.player[i].h);
+      ctx.restore();
+    }
+  }
+
+  function weaponDraw(data){
+      ctx.save();
+    ctx.beginPath();
+    ctx.fillStyle = 'red';
+    ctx.translate(data.player[i].wpn.x ,data.player[i].wpn.y);
+    ctx.rotate(data.player[i].mouseAngle);
+
+    ctx.fillRect(0,0, -data.player[i].wpn.w/2, data.player[i].wpn.h);
+    
+    ctx.restore();
+  }
+
+  window.requestAnimFrame = (function() {
+        return window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame || function(callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+    })();
 
 
 

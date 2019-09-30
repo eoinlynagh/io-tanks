@@ -72,18 +72,73 @@ var Entity = function(){
 
 // Player (controlled object)
 var Player = function(id, user){
+	// Base functionality
 	var self = Entity();
 	self.id = id
 	self.user = user
-	self.w = 100
-	self.h = 150
+	self.w = 20
+	self.h = 30
+	self.speed = 0
+	self.accel = 2
+	self.maxspeed = 4
+	self.turnspeed = 5
+	self.angle = 0
+	// User input flags
     self.pressingRight = false;
     self.pressingLeft = false;
     self.pressingUp = false;
     self.pressingDown = false;
     self.pressingAttack = false;
+    // Mouse handling
+    self.mouse = {};
+    self.mouseAngle = 0;
+    self.wpn = {
+    	x: self.x + self.w/2,
+    	y: self.y + self.h - 2,
+    	w: 20,
+    	h: 50,
+
+    }
 
     Player.list[id] = self;
+
+    self.update = function(){
+    	self.updateMouse();
+    	self.updateSpeed();
+    	self.updatePosition();
+    }
+
+    self.updateMouse = function(){
+      self.mouseAngle = Math.atan2(self.mouse.y - self.y, self.mouse.x - self.x);
+    }
+
+    self.updateSpeed = function(){
+      self.xv *= 0.5
+      self.yv *= 0.5
+
+      if(self.pressingUp){
+      	self.yv += -self.maxspeed * Math.cos(self.angle);
+      	self.xv += self.maxspeed * Math.sin(self.angle);
+      }
+      if(self.pressingDown){
+      	self.yv += self.maxspeed * Math.cos(self.angle);
+      	self.xv += - self.maxspeed * Math.sin(self.angle)
+      }
+
+      if(self.pressingLeft){
+        self.angle += -(self.turnspeed * (Math.PI / 180)) //* (Math.abs(self.xv + self.yv) / (self.maxspeed));
+      }
+      if(self.pressingRight){
+        self.angle += (self.turnspeed * Math.PI / 180) //* (self.xv + self.yv) / (self.maxspeed);
+      }
+    }
+
+    // Should put object collision in here
+    self.updatePosition = function(){
+    	self.x += self.xv
+    	self.y += self.yv
+    }
+
     return self
 }
 
@@ -123,6 +178,8 @@ Player.update = function(){
 			y: p.y,
 			w: p.w,
 			h: p.h,
+			angle: p.angle,
+			mouseangle: p.mouseangle,
 		});
 	}
 	return pack
@@ -150,4 +207,4 @@ setInterval(function(){
     }
     io.to('game').emit('newPositions', pack);
 
-},1000/1);
+},1000/60);
